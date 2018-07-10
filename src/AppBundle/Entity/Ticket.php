@@ -12,6 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ticket
 {
+    const AGE_CHILD = 4;
+    const AGE_ADULT = 12;
+    const AGE_SENIOR = 60;
+
+    const PRICE_CHILD = 8;
+    const PRICE_NORMAL = 16;
+    const PRICE_SENIOR = 12;
+    const PRICE_REDUCED = 10;
+
+
     /**
      * @var int
      *
@@ -63,6 +73,39 @@ class Ticket
      */
     private $command;
 
+
+    /**
+     * @param $birthDate
+     * @param null $reducedPrice
+     * @return int
+     */
+    public function defineTicketCost($birthDate, $reducedPrice = null)
+    {
+        $age = $this->calculateAge($birthDate);
+
+        if($age < self::AGE_CHILD) { return 0; }
+        elseif ($age >= self::AGE_CHILD && $age < self::AGE_ADULT) { return self::PRICE_CHILD; }
+
+        if($reducedPrice)
+        { return self::PRICE_REDUCED; }
+        else
+        { return $age >= self::AGE_SENIOR ? self::PRICE_SENIOR : self::PRICE_NORMAL; }
+    }
+
+    /**
+     * @param $birthDate
+     * @return int
+     */
+    public function calculateAge($birthDate)
+    {
+        $bDate = explode('/', $birthDate);
+        $today = explode('/', date('d/m/Y'));
+
+        if(($bDate[1] < $today[1]) || (($bDate[1] == $today[1]) && ($bDate[0] <= $today[0])))
+        { return ($today[2] - $bDate[2]); }
+
+        return ($today[2] - $bDate[2] - 1);
+    }
 
     /**
      * Get id.
