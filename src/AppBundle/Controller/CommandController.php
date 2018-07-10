@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Command;
+use AppBundle\Form\CommandType;
 
-class DefaultController extends Controller
+class CommandController extends Controller
 {
     /**
      * @return \Symfony\Component\HttpFoundation\Response
@@ -16,6 +16,6 @@ class DefaultController extends Controller
 
         $commandForm = $this->createForm(CommandType::class, new Command());
 
-        return $this->render('form.html.twig', array('commandForm' => $commandForm->createView()));
+        return $this->render('commandForm.html.twig', array('commandForm' => $commandForm->createView()));
     }
 }
