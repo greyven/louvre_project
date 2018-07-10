@@ -193,28 +193,4 @@ class Ticket
     {
         return $this->birthDate;
     }
-
-    /**
-     * Set command.
-     *
-     * @param \AppBundle\Entity\Command $command
-     *
-     * @return Ticket
-     */
-    public function setCommand(\AppBundle\Entity\Command $command)
-    {
-        $this->command = $command;
-
-        return $this;
-    }
-
-    /**
-     * Get command.
-     *
-     * @return \AppBundle\Entity\Command
-     */
-    public function getCommand()
-    {
-        return $this->command;
-    }
 }
