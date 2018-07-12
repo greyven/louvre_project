@@ -77,19 +77,25 @@ class Ticket
     /**
      * @param $birthDate
      * @param null $reducedPrice
+     * @param null $halfDay
      * @return int
      */
-    public function defineTicketCost($birthDate, $reducedPrice = null)
+    public function defineTicketCost($birthDate, $reducedPrice = null, $halfDay = null)
     {
         $age = $this->calculateAge($birthDate);
 
+        if($halfDay)
+        { $coef = 0.5; }
+        else
+        { $coef = 1; }
+
         if($age < self::AGE_CHILD) { return 0; }
-        elseif ($age >= self::AGE_CHILD && $age < self::AGE_ADULT) { return self::PRICE_CHILD; }
+        elseif ($age >= self::AGE_CHILD && $age < self::AGE_ADULT) { return (self::PRICE_CHILD * $coef); }
 
         if($reducedPrice)
-        { return self::PRICE_REDUCED; }
+        { return (self::PRICE_REDUCED * $coef); }
         else
-        { return $age >= self::AGE_SENIOR ? self::PRICE_SENIOR : self::PRICE_NORMAL; }
+        { return $age >= self::AGE_SENIOR ? (self::PRICE_SENIOR * $coef) : (self::PRICE_NORMAL * $coef); }
     }
 
     /**
@@ -244,7 +250,7 @@ class Ticket
      *
      * @return Ticket
      */
-    public function setCommand(\AppBundle\Entity\Command $command)
+    public function setCommand(Command $command)
     {
         $this->command = $command;
 
