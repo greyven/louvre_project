@@ -130,7 +130,7 @@ class Command
      *
      * @return \DateTime
      */
-    public function isVisitDate()
+    public function getVisitDate()
     {
         return $this->visitDate;
     }
@@ -154,7 +154,7 @@ class Command
      *
      * @return int
      */
-    public function isNumberOfTickets()
+    public function getNumberOfTickets()
     {
         return $this->numberOfTickets;
     }
@@ -226,7 +226,7 @@ class Command
      *
      * @return \DateTime
      */
-    public function isReservationDate()
+    public function getReservationDate()
     {
         return $this->reservationDate;
     }
@@ -250,7 +250,7 @@ class Command
      *
      * @return string
      */
-    public function isVisitorEmail()
+    public function getVisitorEmail()
     {
         return $this->visitorEmail;
     }

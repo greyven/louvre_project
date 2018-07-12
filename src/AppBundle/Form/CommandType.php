@@ -24,7 +24,7 @@ class CommandType extends AbstractType
             ->add('visitDate', DateType::class)
             ->add('numberOfTickets', IntegerType::class)
             ->add('visitorEmail', EmailType::class)
-            ->getForm();
+            ->add('Envoyer', SubmitType::class);
     }
 
     /**
