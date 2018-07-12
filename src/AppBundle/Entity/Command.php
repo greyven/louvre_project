@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Command
@@ -32,6 +33,7 @@ class Command
      * @var \DateTime
      *
      * @ORM\Column(name="visitDate", type="datetime")
+     * @Assert\Date()
      */
     private $visitDate;
 
@@ -39,8 +41,10 @@ class Command
      * @var int
      *
      * @ORM\Column(name="numberOfTickets", type="integer")
+     * @Assert\Type(type=int)
+     * @Assert\Range(min=1, minMessage="Vous devez prendre au moins 1 billet.", max=1000, maxMessage="Le maximum d'achat est de 1000 billets")
      */
-    private $numberOfTickets;
+    private $numberOfTickets = 1;
 
     /**
      * @var float
@@ -60,6 +64,7 @@ class Command
      * @var \DateTime
      *
      * @ORM\Column(name="reservationDate", type="datetime")
+     * @Assert\Date()
      */
     private $reservationDate;
 
@@ -67,6 +72,7 @@ class Command
      * @var string
      *
      * @ORM\Column(name="visitorEmail", type="string", length=255)
+     * @Assert\Email()
      */
     private $visitorEmail;
 
@@ -124,7 +130,7 @@ class Command
      *
      * @return \DateTime
      */
-    public function getVisitDate()
+    public function isVisitDate()
     {
         return $this->visitDate;
     }
@@ -148,7 +154,7 @@ class Command
      *
      * @return int
      */
-    public function getNumberOfTickets()
+    public function isNumberOfTickets()
     {
         return $this->numberOfTickets;
     }
@@ -220,7 +226,7 @@ class Command
      *
      * @return \DateTime
      */
-    public function getReservationDate()
+    public function isReservationDate()
     {
         return $this->reservationDate;
     }
@@ -244,7 +250,7 @@ class Command
      *
      * @return string
      */
-    public function getVisitorEmail()
+    public function isVisitorEmail()
     {
         return $this->visitorEmail;
     }
