@@ -7,7 +7,7 @@ app_show_command_form:
     defaults:
         _controller: AppBundle:Command:showCommandForm
 
-app_show_ticket_form:
-    path:      /showticketform
+app_show_tickets_forms:
+    path:      /showticketsforms
     defaults:
-        _controller: AppBundle:Command:showTicketForm
+        _controller: AppBundle:Command:showTicketsForms
