@@ -2,16 +2,17 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\TicketFormCollectionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Command;
 use AppBundle\Form\CommandType;
-use AppBundle\Entity\Ticket;
 use AppBundle\Form\TicketType;
 use Symfony\Component\HttpFoundation\Request;
 
 class CommandController extends Controller
 {
     /**
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showCommandFormAction(Request $request)
@@ -33,11 +34,14 @@ class CommandController extends Controller
 
                 $request->getSession()->getFlashBag()
                     ->add('Récapitulatif', 'Vous souhaitez réserver '.$command->getNumberOfTickets().$grammar.$halfDay.
-                        ' le '.$command->getVisitDate().'.')
+                        ' le '.$command->getVisitDate()->format('d-m-Y').'.')
                 ;
 
+                // sauvegarde $command en variable session
+                $request->getSession()->set('command', $command);
+
                 // Redirection vers le second formulaire auquel on passe l'objet $command
-                return $this->redirectToRoute('app_show_ticket_form', array('command' => $command));
+                return $this->redirectToRoute('app_show_tickets_forms');
             }
         }
 
@@ -45,11 +49,24 @@ class CommandController extends Controller
         return $this->render('commandForm.html.twig', array('commandForm' => $commandForm->createView()));
     }
 
-    public function showTicketFormAction()
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showTicketsFormsAction(Request $request)
     {
+//        $locale = $request->getLocale();
+        $command = $request->getSession()->get('command');
+        $nbTickets = $command->getNumberOfTickets();
 
-        $ticketForm = $this->createForm(TicketType::class, new Ticket());
+        $ticketFormCollection = $this->createForm(TicketFormCollectionType::class);
 
-        return $this->render('ticketForm.html.twig', array('ticketForm' => $ticketForm->createView()));
+        for ($i = 0; $i < $nbTickets; $i++)
+        {
+            $tForm = $this->createForm(TicketType::class);
+            $ticketFormCollection->add($tForm);
+        }
+
+        return $this->render('tickets.html.twig',
+            array('ticketFormCollection' => $ticketFormCollection->createView()));
     }
 }

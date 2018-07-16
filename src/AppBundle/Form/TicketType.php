@@ -13,16 +13,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TicketType extends AbstractType
 {
+//    private $locale = 'fr';
+//
+//    public function __construct($locale = 'fr')
+//    {
+//        $this->locale = $locale;
+//    }
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('costType', ChoiceType::class)
+//            ->add('costType', ChoiceType::class)
             ->add('lastName', TextType::class)
             ->add('firstName', TextType::class)
-            ->add('country', CountryType::class)
+            ->add('country', CountryType::class, array(
+                "preferred_choices" => array('fr' /*$this->locale*/)))
             ->add('birthDate', BirthdayType::class);
     }
 
@@ -34,11 +42,4 @@ class TicketType extends AbstractType
         $resolver->setDefaults(array('data_class' => Ticket::class));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'appbundle_ticket';
-    }
 }

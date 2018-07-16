@@ -91,7 +91,6 @@ class Command
     private $tickets;
 
 
-
     /**
      * Get id.
      *
@@ -268,48 +267,5 @@ class Command
     public function getVisitorEmail()
     {
         return $this->visitorEmail;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->tickets = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add ticket.
-     *
-     * @param \AppBundle\Entity\Ticket $ticket
-     *
-     * @return Command
-     */
-    public function addTicket(\AppBundle\Entity\Ticket $ticket)
-    {
-        $this->tickets[] = $ticket;
-
-        return $this;
-    }
-
-    /**
-     * Remove ticket.
-     *
-     * @param \AppBundle\Entity\Ticket $ticket
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeTicket(\AppBundle\Entity\Ticket $ticket)
-    {
-        return $this->tickets->removeElement($ticket);
-    }
-
-    /**
-     * Get tickets.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTickets()
-    {
-        return $this->tickets;
     }
 }
