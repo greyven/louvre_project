@@ -23,8 +23,7 @@ class CommandType extends AbstractType
             ->add('ticketType', CheckboxType::class, array('required' => false))
             ->add('visitDate', DateType::class)
             ->add('numberOfTickets', IntegerType::class)
-            ->add('visitorEmail', EmailType::class)
-            ->add('Envoyer', SubmitType::class);
+            ->add('visitorEmail', EmailType::class);
     }
 
     /**

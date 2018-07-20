@@ -5,8 +5,10 @@
     <h3>Formulaire de réservation</h3>
 
     <div class="well">
-        {{ form(commandForm) }}
+        {{ form_start(commandForm) }}
+        {{ form_row(commandForm) }}
         <input type="submit" value="Valider" class="btn btn-default" />
+        {{ form_end(commandForm) }}
     </div>
 
 {% endblock %}
