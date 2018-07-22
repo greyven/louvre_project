@@ -67,7 +67,7 @@ class Ticket
     private $birthDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Command")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Command", inversedBy="tickets")
      *
      * @ORM\JoinColumn(nullable=false)
      */
