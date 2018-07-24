@@ -4,6 +4,10 @@
 {% block body %}
     <h3>Complétion des tickets</h3>
 
+    <p>Récapitulatif : {{ recap }}</p>
+
+    {{ dump(command) }}
+
     <div class="well">
         {{ form(ticketFormCollection) }}
         <input type="submit" value="Valider" class="btn btn-default" />
