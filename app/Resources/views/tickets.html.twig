@@ -6,11 +6,13 @@
 
     <p>Récapitulatif : {{ recap }}</p>
 
-    {{ dump(command) }}
+    {{ dump(ticketFormCollection) }}
 
     <div class="well">
-        {{ form(ticketFormCollection) }}
+        {{ form_start(ticketFormCollection) }}
+        {{ form_row(ticketFormCollection) }}
         <input type="submit" value="Valider" class="btn btn-default" />
+        {{ form_end(ticketFormCollection) }}
     </div>
 
 {% endblock %}
