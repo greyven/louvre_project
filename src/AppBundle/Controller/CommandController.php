@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Ticket;
 use AppBundle\Form\TicketFormCollectionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Command;
 use AppBundle\Form\CommandType;
-use AppBundle\Form\TicketType;
 use Symfony\Component\HttpFoundation\Request;
 
 class CommandController extends Controller
@@ -29,13 +29,12 @@ class CommandController extends Controller
             // Si les données saisies sont valides
             if($commandForm->isValid())
             {
-                $grammar = $command->getNumberOfTickets() > 1 ? ' billets' : ' billet';
-                $halfDay = $command->getTicketType() ? ' demi-journée' : ' journée';
+                // insertion des tickets vides
+                for($i = 0 ; $i < $command->getNumberOfTickets(); $i++ ){
+                    $command->addTicket(new Ticket());
+                }
 
-                $request->getSession()->getFlashBag()
-                    ->add('Récapitulatif', 'Vous souhaitez réserver '.$command->getNumberOfTickets().$grammar.$halfDay.
-                        ' le '.$command->getVisitDate()->format('d-m-Y').'.')
-                ;
+
 
                 // sauvegarde $command en variable session
                 $request->getSession()->set('command', $command);
@@ -54,19 +53,20 @@ class CommandController extends Controller
      */
     public function showTicketsFormsAction(Request $request)
     {
-//        $locale = $request->getLocale();
         $command = $request->getSession()->get('command');
-        $nbTickets = $command->getNumberOfTickets();
+        $grammar = $command->getNumberOfTickets() > 1 ? ' billets' : ' billet';
+        $halfDay = $command->getTicketType() ? ' demi-journée' : ' journée';
+        $recap = 'Vous souhaitez réserver '.$command->getNumberOfTickets().$grammar.$halfDay.
+        ' pour le '.$command->getVisitDate()->format('d-m-Y').'.';
 
-        $ticketFormCollection = $this->createForm(TicketFormCollectionType::class);
+        $ticketFormCollection = $this->createForm(TicketFormCollectionType::class, $command);
 
-        for ($i = 0; $i < $nbTickets; $i++)
-        {
-            $tForm = $this->createForm(TicketType::class);
-            $ticketFormCollection->add($tForm);
-        }
 
         return $this->render('tickets.html.twig',
-            array('ticketFormCollection' => $ticketFormCollection->createView()));
+            array(
+                'ticketFormCollection' => $ticketFormCollection->createView(),
+                'command' => $command,
+                'recap' => $recap
+        ));
     }
 }
