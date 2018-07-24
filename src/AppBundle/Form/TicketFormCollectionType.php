@@ -18,6 +18,7 @@ class TicketFormCollectionType extends AbstractType
         $builder
             ->add('tickets', CollectionType::class, array(
                 'entry_type' => TicketType::class,
+                'label' => ' ',
                 'by_reference' => false    //permet au formulaire d'appeler adder et remover (voir doc)
             ));
     }
@@ -28,5 +29,13 @@ class TicketFormCollectionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => Command::class));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'Billets_:';
     }
 }
