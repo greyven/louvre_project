@@ -3,7 +3,6 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Command;
-use AppBundle\Entity\Ticket;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,6 +29,4 @@ class TicketFormCollectionType extends AbstractType
     {
         $resolver->setDefaults(array('data_class' => Command::class));
     }
-
-
 }
