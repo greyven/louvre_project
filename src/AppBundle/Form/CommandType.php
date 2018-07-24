@@ -48,6 +48,6 @@ class CommandType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'Commande:';
+        return 'Commande_:';
     }
 }
