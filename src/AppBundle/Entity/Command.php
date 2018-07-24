@@ -4,7 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-// use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Command
@@ -33,19 +33,21 @@ class Command
     /**
      * @var \DateTime
      *
+     * @Assert\Date()
+     *
      * @ORM\Column(name="visitDate", type="datetime")
      */
-//* @Assert\Date()
 
     private $visitDate;
 
     /**
      * @var int
      *
+     * @Assert\Type(type="int")
+     * @Assert\Range(min=1, minMessage="Vous devez prendre au moins 1 billet.", max=10, maxMessage="Le maximum d'achat est de 10 billets")
+     *
      * @ORM\Column(name="numberOfTickets", type="integer")
      */
-//* @Assert\Type(type=int)
-//* @Assert\Range(min=1, minMessage="Vous devez prendre au moins 1 billet.", max=1000, maxMessage="Le maximum d'achat est de 1000 billets")
 
     private $numberOfTickets = 1;
 
@@ -66,27 +68,27 @@ class Command
     /**
      * @var \DateTime
      *
+     * @Assert\Date()
+     *
      * @ORM\Column(name="reservationDate", type="datetime")
      */
-//* @Assert\Date()
 
     private $reservationDate;
 
     /**
      * @var string
      *
+     * @Assert\Email()
+     *
      * @ORM\Column(name="visitorEmail", type="string", length=255)
      */
-//* @Assert\Email()
 
     private $visitorEmail;
 
     /**
      * @var Ticket[]|ArrayCollection
      *
-     * ATTENTION l'ANNOTATION n'est pas complete :)
-     *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ticket", mappedBy="command")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ticket", mappedBy="command", cascade={"persist","remove"})
      */
     private $tickets;
 
@@ -287,6 +289,7 @@ class Command
     public function addTicket(\AppBundle\Entity\Ticket $ticket)
     {
         $this->tickets[] = $ticket;
+        $ticket->setCommand($this);
 
         return $this;
     }
