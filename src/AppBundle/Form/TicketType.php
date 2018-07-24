@@ -5,7 +5,6 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Ticket;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,13 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TicketType extends AbstractType
 {
-//    private $locale = 'fr';
-//
-//    public function __construct($locale = 'fr')
-//    {
-//        $this->locale = $locale;
-//    }
-
     /**
      * {@inheritdoc}
      */
@@ -30,7 +22,7 @@ class TicketType extends AbstractType
             ->add('lastName', TextType::class)
             ->add('firstName', TextType::class)
             ->add('country', CountryType::class, array(
-                "preferred_choices" => array('fr' /*$this->locale*/)))
+                "preferred_choices" => array('FR')))
             ->add('birthDate', BirthdayType::class);
     }
 
@@ -41,5 +33,4 @@ class TicketType extends AbstractType
     {
         $resolver->setDefaults(array('data_class' => Ticket::class));
     }
-
 }
