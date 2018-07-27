@@ -12,6 +12,11 @@ app_show_tickets_forms:
     defaults:
         _controller: AppBundle:Command:showTicketsForms
 
+app_bill:
+    path:      /bill
+    defaults:
+        _controller: AppBundle:Command:bill
+
 order_prepare:
     path:      /order/prepare
     defaults:
