@@ -16,10 +16,14 @@ class Ticket
     const AGE_ADULT = 12;
     const AGE_SENIOR = 60;
 
+    const PRICE_BABY = 0;
     const PRICE_CHILD = 8;
     const PRICE_NORMAL = 16;
     const PRICE_SENIOR = 12;
     const PRICE_REDUCED = 10;
+
+    const COEF_FULL = 1;
+    const COEF_HALF = 0.5;
 
 
     /**
@@ -32,11 +36,18 @@ class Ticket
     private $id;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="costType", type="string", length=255)
+     * @ORM\Column(name="costType", type="integer")
      */
     private $costType;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ticketPrice", type="integer")
+     */
+    private $ticketPrice;
 
     /**
      * @var string
@@ -86,54 +97,55 @@ class Ticket
      * @param null $halfDay
      * @return int
      */
-    public function defineTicketCost($birthDate, $reducedPrice = null, $halfDay = null)
+    public function defineTicketCost()
     {
-        $age = $this->calculateAge($birthDate);
+        $age = $this->calculateAge();
+        $coef = ($this->getCommand()->getTicketType() == Command::HALF_DAY)? self::COEF_HALF : self::COEF_FULL;
 
-        if($halfDay)
-        {
-            $coef = 0.5;
-        }
-        else
-        {
-            $coef = 1;
-        }
 
         if($age < self::AGE_CHILD)
         {
-            $this->setCostType('Gratuit - bébé');
-            return 0;
+            $this->setCostType(0); // 0 = Gratuit - bébé
+            $price = self::PRICE_BABY;
         }
-        elseif ($age >= self::AGE_CHILD && $age < self::AGE_ADULT)
+        elseif ($age < self::AGE_ADULT)
         {
-            $this->setCostType('Tarif - enfant');
-            return (self::PRICE_CHILD * $coef);
-        }
-
-        if($reducedPrice)
-        {
-            $this->setCostType('Tarif - réduit (présenter justificatif)');
-            return (self::PRICE_REDUCED * $coef);
+            $this->setCostType(1); // 1 = Tarif - enfant
+            $price = self::PRICE_CHILD * $coef;
         }
         else
         {
-            $age >= self::AGE_SENIOR ? $this->setCostType('Tarif - senior') : $this->setCostType('Tarif - normal');
-            return $age >= self::AGE_SENIOR ? (self::PRICE_SENIOR * $coef) : (self::PRICE_NORMAL * $coef);
+            if($this->getReducedCost())
+            {
+                $this->setCostType(2); // 2 = Tarif - réduit (présenter justificatif)
+                $price = self::PRICE_REDUCED * $coef;
+            }
+            else
+            {
+                // 3 = Tarif - senior  |  4 = Plein tarif
+                $age >= self::AGE_SENIOR ? $this->setCostType(3) : $this->setCostType(4);
+                $price = ($age >= self::AGE_SENIOR) ? (self::PRICE_SENIOR * $coef) : (self::PRICE_NORMAL * $coef);
+            }
         }
+
+        return $price;
     }
 
     /**
      * @param $birthDate
      * @return int
      */
-    public function calculateAge($birthDate)
+    public function calculateAge()
     {
-        $strBDate = $birthDate->format('d/m/Y');
-        $bDate = explode('/', $strBDate);
+
+        $birthDate = $this->getBirthDate()->format('d/m/Y');
+        $bDate = explode('/', $birthDate);
         $today = explode('/', date('d/m/Y'));
 
         if(($bDate[1] < $today[1]) || (($bDate[1] == $today[1]) && ($bDate[0] <= $today[0])))
-        { return ($today[2] - $bDate[2]); }
+        {
+            return ($today[2] - $bDate[2]);
+        }
 
         return ($today[2] - $bDate[2] - 1);
     }
@@ -314,5 +326,29 @@ class Ticket
     public function getCommand()
     {
         return $this->command;
+    }
+
+    /**
+     * Set ticketPrice.
+     *
+     * @param \int $ticketPrice
+     *
+     * @return Ticket
+     */
+    public function setTicketPrice($ticketPrice)
+    {
+        $this->ticketPrice = $ticketPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get ticketPrice.
+     *
+     * @return \int
+     */
+    public function getTicketPrice()
+    {
+        return $this->ticketPrice;
     }
 }
