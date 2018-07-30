@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,18 +20,18 @@ class TicketType extends AbstractType
     {
         $builder
             ->add('lastName', TextType::class, array(
-                'label' => 'Nom : ')
-            )
+                'label' => 'Nom : '))
             ->add('firstName', TextType::class, array(
-                    'label' => 'Prénom : ')
-            )
+                    'label' => 'Prénom : '))
             ->add('country', CountryType::class, array(
                 'label' => 'Pays : ',
                 'preferred_choices' => array('FR')))
             ->add('birthDate', BirthdayType::class, array(
                 'label' => 'Date de naissance : ',
-                'data' => new \DateTime("01-01-1990"))
-            )
+                'data' => new \DateTime("01-01-1990")))
+            ->add('reducedCost', CheckboxType::class, array(
+                'label' => 'Tarif réduit ? ',
+                'required' => false))
         ;
     }
 
