@@ -21,8 +21,3 @@ order_prepare:
     path:      /order/prepare
     defaults:
         _controller: AppBundle:Order:prepare
-
-order_checkout:
-    path:      /order/checkout
-    defaults:
-        _controller: AppBundle:Order:checkout
