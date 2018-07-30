@@ -14,6 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Command
 {
+    const FULL_DAY = false;
+    const HALF_DAY = true;
+
     /**
      * @var int
      *
@@ -37,19 +40,7 @@ class Command
      *
      * @ORM\Column(name="visitDate", type="datetime")
      */
-
     private $visitDate;
-
-    /**
-     * @var int
-     *
-     * @Assert\Type(type="int")
-     * @Assert\Range(min=1, minMessage="Vous devez prendre au moins 1 billet.", max=10, maxMessage="Le maximum d'achat est de 10 billets")
-     *
-     * @ORM\Column(name="numberOfTickets", type="integer")
-     */
-
-    private $numberOfTickets = 1;
 
     /**
      * @var float
@@ -59,20 +50,12 @@ class Command
     private $totalPrice;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="visitorsNames", type="string", length=255)
-     */
-    private $visitorsNames;
-
-    /**
      * @var \DateTime
      *
      * @Assert\Date()
      *
      * @ORM\Column(name="reservationDate", type="datetime")
      */
-
     private $reservationDate;
 
     /**
@@ -82,7 +65,6 @@ class Command
      *
      * @ORM\Column(name="visitorEmail", type="string", length=255)
      */
-
     private $visitorEmail;
 
     /**
