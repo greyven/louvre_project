@@ -62,10 +62,8 @@ class CommandController extends Controller
         // Si on a des données 'POST' c'est que le formulaire a été envoyé donc on le traite
         if($request->isMethod('POST'))
         {
-            dump($command);
             // Récupère les données des forms et hydrate $command
             $ticketsCollection->handleRequest($request);
-            dump($command);
 
             // Si les forms sont valides
             if($ticketsCollection->isValid())
@@ -78,12 +76,7 @@ class CommandController extends Controller
                 // On persist chaque $ticket dans la collection
                 foreach ($command->getTickets() as $ticket)
                 {
-                    $em->persist($ticket);
-
-                    $bdate = $ticket->getBirthDate();
-                    $redu = $ticket->getReducedCost();
-                    $half = $command->getTicketType();
-                    $ticketPrice = $ticket->defineTicketCost($bdate, $redu, $half);
+                    $ticketPrice = $ticket->defineTicketCost();
                     $totalPrice = $totalPrice + $ticketPrice;
 
                     $ticketName = $ticket->getFirstName()." ".$ticket->getLastName();
@@ -94,12 +87,6 @@ class CommandController extends Controller
                 $command->setTotalPrice($totalPrice);
                 $command->setVisitorsNames($visitorsNames);
                 $command->setReservationDate(new \DateTime());
-
-                // on persist la commande
-                $em->persist($command);
-
-                // et on sauvegarde en bdd
-                $em->flush();
 
                 $request->getSession()->set('command', $command);
                 // Redirection vers la page de paiement
@@ -118,11 +105,8 @@ class CommandController extends Controller
 
     public function billAction(Request $request)
     {
-        $command = $request->get('command');
-
-//        $commId = $request->get('commId');
-//        $repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Command');
-//        $comm = $repo->find($commId);
+        $command = $request->getSession()->get('command');
+        dump($command);
 
         return $this->render('bill.html.twig', array('command' => $command));
     }
