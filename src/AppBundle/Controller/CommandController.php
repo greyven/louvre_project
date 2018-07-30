@@ -34,8 +34,6 @@ class CommandController extends Controller
                     $command->addTicket(new Ticket());
                 }
 
-
-
                 // sauvegarde $command en variable session
                 $request->getSession()->set('command', $command);
 
@@ -59,14 +57,73 @@ class CommandController extends Controller
         $recap = 'Vous souhaitez réserver '.$command->getNumberOfTickets().$grammar.$halfDay.
         ' pour le '.$command->getVisitDate()->format('d-m-Y').'.';
 
-        $ticketFormCollection = $this->createForm(TicketFormCollectionType::class, $command);
+        $ticketsCollection = $this->createForm(TicketFormCollectionType::class, $command);
 
+        // Si on a des données 'POST' c'est que le formulaire a été envoyé donc on le traite
+        if($request->isMethod('POST'))
+        {
+            dump($command);
+            // Récupère les données des forms et hydrate $command
+            $ticketsCollection->handleRequest($request);
+            dump($command);
 
+            // Si les forms sont valides
+            if($ticketsCollection->isValid())
+            {
+                $em = $this->getDoctrine()->getManager();
+
+                $totalPrice = 0;
+                $visitorsNames = '';
+
+                // On persist chaque $ticket dans la collection
+                foreach ($command->getTickets() as $ticket)
+                {
+                    $em->persist($ticket);
+
+                    $bdate = $ticket->getBirthDate();
+                    $redu = $ticket->getReducedCost();
+                    $half = $command->getTicketType();
+                    $ticketPrice = $ticket->defineTicketCost($bdate, $redu, $half);
+                    $totalPrice = $totalPrice + $ticketPrice;
+
+                    $ticketName = $ticket->getFirstName()." ".$ticket->getLastName();
+                    $visitorsNames = $visitorsNames."/".$ticketName;
+                }
+
+                // on complète les champs vides de la commande
+                $command->setTotalPrice($totalPrice);
+                $command->setVisitorsNames($visitorsNames);
+                $command->setReservationDate(new \DateTime());
+
+                // on persist la commande
+                $em->persist($command);
+
+                // et on sauvegarde en bdd
+                $em->flush();
+
+                $request->getSession()->set('command', $command);
+                // Redirection vers la page de paiement
+                return $this->redirectToRoute('app_bill');
+            }
+        }
+
+        // Sinon le visiteur arrive sur la page, ou bien des données du formulaire ne sont pas valides
         return $this->render('tickets.html.twig',
             array(
-                'ticketFormCollection' => $ticketFormCollection->createView(),
+                'ticketsCollection' => $ticketsCollection->createView(),
                 'command' => $command,
                 'recap' => $recap
         ));
+    }
+
+    public function billAction(Request $request)
+    {
+        $command = $request->get('command');
+
+//        $commId = $request->get('commId');
+//        $repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Command');
+//        $comm = $repo->find($commId);
+
+        return $this->render('bill.html.twig', array('command' => $command));
     }
 }
