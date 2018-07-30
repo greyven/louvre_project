@@ -67,12 +67,18 @@ class Ticket
     private $birthDate;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="reducedCost", type="boolean")
+     */
+    private $reducedCost;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Command", inversedBy="tickets")
      *
      * @ORM\JoinColumn(nullable=false)
      */
     private $command;
-
 
     /**
      * @param $birthDate
@@ -85,17 +91,35 @@ class Ticket
         $age = $this->calculateAge($birthDate);
 
         if($halfDay)
-        { $coef = 0.5; }
+        {
+            $coef = 0.5;
+        }
         else
-        { $coef = 1; }
+        {
+            $coef = 1;
+        }
 
-        if($age < self::AGE_CHILD) { return 0; }
-        elseif ($age >= self::AGE_CHILD && $age < self::AGE_ADULT) { return (self::PRICE_CHILD * $coef); }
+        if($age < self::AGE_CHILD)
+        {
+            $this->setCostType('Gratuit - bébé');
+            return 0;
+        }
+        elseif ($age >= self::AGE_CHILD && $age < self::AGE_ADULT)
+        {
+            $this->setCostType('Tarif - enfant');
+            return (self::PRICE_CHILD * $coef);
+        }
 
         if($reducedPrice)
-        { return (self::PRICE_REDUCED * $coef); }
+        {
+            $this->setCostType('Tarif - réduit (présenter justificatif)');
+            return (self::PRICE_REDUCED * $coef);
+        }
         else
-        { return $age >= self::AGE_SENIOR ? (self::PRICE_SENIOR * $coef) : (self::PRICE_NORMAL * $coef); }
+        {
+            $age >= self::AGE_SENIOR ? $this->setCostType('Tarif - senior') : $this->setCostType('Tarif - normal');
+            return $age >= self::AGE_SENIOR ? (self::PRICE_SENIOR * $coef) : (self::PRICE_NORMAL * $coef);
+        }
     }
 
     /**
@@ -104,7 +128,8 @@ class Ticket
      */
     public function calculateAge($birthDate)
     {
-        $bDate = explode('/', $birthDate);
+        $strBDate = $birthDate->format('d/m/Y');
+        $bDate = explode('/', $strBDate);
         $today = explode('/', date('d/m/Y'));
 
         if(($bDate[1] < $today[1]) || (($bDate[1] == $today[1]) && ($bDate[0] <= $today[0])))
@@ -241,6 +266,30 @@ class Ticket
     public function getBirthDate()
     {
         return $this->birthDate;
+    }
+
+    /**
+     * Set reducedCost.
+     *
+     * @param bool $reducedCost
+     *
+     * @return Ticket
+     */
+    public function setReducedCost($reducedCost)
+    {
+        $this->reducedCost = $reducedCost;
+
+        return $this;
+    }
+
+    /**
+     * Get reducedCost.
+     *
+     * @return bool
+     */
+    public function getReducedCost()
+    {
+        return $this->reducedCost;
     }
 
     /**
