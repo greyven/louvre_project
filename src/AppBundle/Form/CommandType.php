@@ -21,18 +21,15 @@ class CommandType extends AbstractType
         $builder
             ->add('ticketType', CheckboxType::class, array(
                 'label' => 'Demi-journée ? ',
-                'required' => false)
-            )
+                'required' => false))
             ->add('visitDate', DateType::class, array(
                     'label' => 'Date de visite : ',
-                    'data' => new \DateTime())
-            )
+                    'data' => new \DateTime()))
             ->add('numberOfTickets', IntegerType::class, array(
-                    'label' => 'Nombre de billets : ')
-            )
+                    'label' => 'Nombre de billets : '))
             ->add('visitorEmail', EmailType::class, array(
-                    'label' => 'Email : ')
-            );
+                    'label' => 'Email : '))
+        ;
     }
 
     /**
