@@ -2,13 +2,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h3>Formulaire de réservation</h3>
+    <h3 class="text-center">Formulaire de réservation</h3>
 
-    <div class="well">
-        {{ form_start(commandForm) }}
-        {{ form_row(commandForm) }}
-        <input type="submit" value="Valider" class="btn btn-default" />
-        {{ form_end(commandForm) }}
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <div class="well">
+                {{ form_start(commandForm) }}
+                {{ form_row(commandForm) }}
+                <input type="submit" value="Valider" class="btn btn-default" />
+                {{ form_end(commandForm) }}
+            </div>
+        </div>
     </div>
 
 {% endblock %}
