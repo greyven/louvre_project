@@ -79,7 +79,7 @@ class CommandController extends Controller
 
             $request->getSession()->set('command', $command);
             // Redirection vers la page de paiement
-            return $this->redirectToRoute('app_bill');
+            return $this->redirectToRoute('app_command_prepare');
         }
 
         // Sinon le visiteur arrive sur la page, ou bien des données du formulaire ne sont pas valides
@@ -91,11 +91,39 @@ class CommandController extends Controller
         ));
     }
 
-    public function billAction(Request $request)
+    public function prepareAction(Request $request)
     {
         $command = $request->getSession()->get('command');
-        dump($command);
+        $request->getSession()->set('command', $command);
 
-        return $this->render('bill.html.twig', array('command' => $command));
+        if ($request->isMethod('POST'))
+        {
+            // Get the credit card details submitted by the form
+            \Stripe\Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+            $token = $request->get('stripeToken');
+
+            // Create a charge: this will charge the user's card
+            try
+            {
+                $charge = \Stripe\Charge::create(array(
+                    "amount" => $command->getTotalPrice(), // Amount in cents
+                    "currency" => "eur",
+                    "source" => $token,
+                    "description" => "Paiement de votre commande"
+                ));
+                dump($charge);
+                $this->addFlash("success", "Paiement éffectué !");
+                return $this->redirectToRoute("app_command_prepare");
+            }
+            catch(\Stripe\Error\Card $e)
+            {
+                $this->addFlash("error", "Erreur, paiement non éffectué !");
+                return $this->redirectToRoute("app_command_prepare");
+                // The card has been declined
+            }
+        }
+
+        return $this->render('prepare.html.twig',
+            array('stripe_public_key' => $this->getParameter('stripe_public_key'), 'command' => $command));
     }
 }
