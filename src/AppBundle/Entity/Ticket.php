@@ -38,9 +38,9 @@ class Ticket
     /**
      * @var int
      *
-     * @ORM\Column(name="costType", type="integer")
+     * @ORM\Column(name="priceType", type="integer")
      */
-    private $costType;
+    private $priceType;
 
     /**
      * @var int
@@ -80,9 +80,9 @@ class Ticket
     /**
      * @var bool
      *
-     * @ORM\Column(name="reducedCost", type="boolean")
+     * @ORM\Column(name="reducedPrice", type="boolean")
      */
-    private $reducedCost;
+    private $reducedPrice;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Command", inversedBy="tickets")
@@ -92,41 +92,40 @@ class Ticket
     private $command;
 
     /**
-     * @param $birthDate
-     * @param null $reducedPrice
-     * @param null $halfDay
      * @return int
      */
-    public function defineTicketCost()
+    public function defineAndSetTicketPrice()
     {
         $age = $this->calculateAge();
-        $coef = ($this->getCommand()->getTicketType() == Command::HALF_DAY)? self::COEF_HALF : self::COEF_FULL;
+        $coef = ($this->getCommand()->getFullDay() == Command::FULL_DAY)? self::COEF_FULL : self::COEF_HALF;
 
 
         if($age < self::AGE_CHILD)
         {
-            $this->setCostType(0); // 0 = Gratuit - bébé
+            $this->setPriceType(0); // 0 = Gratuit - bébé
             $price = self::PRICE_BABY;
         }
         elseif ($age < self::AGE_ADULT)
         {
-            $this->setCostType(1); // 1 = Tarif - enfant
+            $this->setPriceType(1); // 1 = Tarif - enfant
             $price = self::PRICE_CHILD * $coef;
         }
         else
         {
-            if($this->getReducedCost())
+            if($this->getReducedPrice())
             {
-                $this->setCostType(2); // 2 = Tarif - réduit (présenter justificatif)
+                $this->setPriceType(2); // 2 = Tarif - réduit (présenter justificatif)
                 $price = self::PRICE_REDUCED * $coef;
             }
             else
             {
                 // 3 = Tarif - senior  |  4 = Plein tarif
-                $age >= self::AGE_SENIOR ? $this->setCostType(3) : $this->setCostType(4);
+                $age >= self::AGE_SENIOR ? $this->setPriceType(3) : $this->setPriceType(4);
                 $price = ($age >= self::AGE_SENIOR) ? (self::PRICE_SENIOR * $coef) : (self::PRICE_NORMAL * $coef);
             }
         }
+
+        $this->setTicketPrice($price);
 
         return $price;
     }
@@ -161,27 +160,27 @@ class Ticket
     }
 
     /**
-     * Set costType.
+     * Set priceType.
      *
-     * @param string $costType
+     * @param string $priceType
      *
      * @return Ticket
      */
-    public function setCostType($costType)
+    public function setPriceType($priceType)
     {
-        $this->costType = $costType;
+        $this->priceType = $priceType;
 
         return $this;
     }
 
     /**
-     * Get costType.
+     * Get priceType.
      *
      * @return string
      */
-    public function getCostType()
+    public function getPriceType()
     {
-        return $this->costType;
+        return $this->priceType;
     }
 
     /**
@@ -281,27 +280,27 @@ class Ticket
     }
 
     /**
-     * Set reducedCost.
+     * Set reducedPrice.
      *
-     * @param bool $reducedCost
+     * @param bool $reducedPrice
      *
      * @return Ticket
      */
-    public function setReducedCost($reducedCost)
+    public function setReducedPrice($reducedPrice)
     {
-        $this->reducedCost = $reducedCost;
+        $this->reducedPrice = $reducedPrice;
 
         return $this;
     }
 
     /**
-     * Get reducedCost.
+     * Get reducedPrice.
      *
      * @return bool
      */
-    public function getReducedCost()
+    public function getReducedPrice()
     {
-        return $this->reducedCost;
+        return $this->reducedPrice;
     }
 
     /**

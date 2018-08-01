@@ -14,8 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Command
 {
-    const FULL_DAY = false;
-    const HALF_DAY = true;
+    const FULL_DAY = true;
+    const HALF_DAY = false;
 
     /**
      * @var int
@@ -37,9 +37,9 @@ class Command
     /**
      * @var bool
      *
-     * @ORM\Column(name="ticketType", type="boolean")
+     * @ORM\Column(name="fullDay", type="boolean")
      */
-    private $ticketType;
+    private $fullDay;
 
     /**
      * @var \DateTime
@@ -101,9 +101,9 @@ class Command
      *
      * @return Command
      */
-    public function setTicketType($ticketType)
+    public function setFullDay($fullDay)
     {
-        $this->ticketType = $ticketType;
+        $this->fullDay = $fullDay;
 
         return $this;
     }
@@ -113,9 +113,9 @@ class Command
      *
      * @return bool
      */
-    public function getTicketType()
+    public function getFullDay()
     {
-        return $this->ticketType;
+        return $this->fullDay;
     }
 
     /**

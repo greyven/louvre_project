@@ -29,7 +29,7 @@ class TicketType extends AbstractType
             ->add('birthDate', BirthdayType::class, array(
                 'label' => 'Date de naissance : ',
                 'data' => new \DateTime("01-01-1990")))
-            ->add('reducedCost', CheckboxType::class, array(
+            ->add('reducedPrice', CheckboxType::class, array(
                 'label' => 'Tarif réduit ? ',
                 'required' => false))
         ;

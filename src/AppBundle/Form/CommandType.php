@@ -19,11 +19,11 @@ class CommandType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('ticketType', ChoiceType::class, array(
+            ->add('fullDay', ChoiceType::class, array(
                 'label' => 'Type de billet : ',
                 'choices' => array(
-                    'Journée' => 'full',
-                    'Demi-journée' => 'half',
+                    'Journée' => true,
+                    'Demi-journée' => false,
                 ),
                 'expanded' => true,
                 'multiple' => false))
