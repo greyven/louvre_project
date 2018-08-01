@@ -4,7 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Command;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -19,9 +19,14 @@ class CommandType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('ticketType', CheckboxType::class, array(
-                'label' => 'Demi-journée ? ',
-                'required' => false))
+            ->add('ticketType', ChoiceType::class, array(
+                'label' => 'Type de billet : ',
+                'choices' => array(
+                    'Journée' => 'full',
+                    'Demi-journée' => 'half',
+                ),
+                'expanded' => true,
+                'multiple' => false))
             ->add('visitDate', DateType::class, array(
                     'label' => 'Date de visite : ',
                     'data' => new \DateTime()))
