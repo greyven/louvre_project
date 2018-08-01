@@ -21,3 +21,4 @@ src/AppBundle/Entity/Command.php~
 src/AppBundle/Entity/Ticket.php~
 src/AppBundle/Entity/Command.php~
 *.php~
+*.php~
