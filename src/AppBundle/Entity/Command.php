@@ -27,6 +27,14 @@ class Command
     private $id;
 
     /**
+     * @var int
+     *
+     * @Assert\Type(type="int")
+     * @Assert\Range(min=1, minMessage="Vous devez prendre au moins 1 billet.", max=10, maxMessage="Le maximum d'achat est de 10 billets")
+     */
+    private $numberOfTickets = 1;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="ticketType", type="boolean")
@@ -135,30 +143,6 @@ class Command
     }
 
     /**
-     * Set numberOfTickets.
-     *
-     * @param int $numberOfTickets
-     *
-     * @return Command
-     */
-    public function setNumberOfTickets($numberOfTickets)
-    {
-        $this->numberOfTickets = $numberOfTickets;
-
-        return $this;
-    }
-
-    /**
-     * Get numberOfTickets.
-     *
-     * @return int
-     */
-    public function getNumberOfTickets()
-    {
-        return $this->numberOfTickets;
-    }
-
-    /**
      * Set totalPrice.
      *
      * @param float $totalPrice
@@ -180,30 +164,6 @@ class Command
     public function getTotalPrice()
     {
         return $this->totalPrice;
-    }
-
-    /**
-     * Set visitorsNames.
-     *
-     * @param string $visitorsNames
-     *
-     * @return Command
-     */
-    public function setVisitorsNames($visitorsNames)
-    {
-        $this->visitorsNames = $visitorsNames;
-
-        return $this;
-    }
-
-    /**
-     * Get visitorsNames.
-     *
-     * @return string
-     */
-    public function getVisitorsNames()
-    {
-        return $this->visitorsNames;
     }
 
     /**
@@ -296,5 +256,29 @@ class Command
     public function getTickets()
     {
         return $this->tickets;
+    }
+
+    /**
+     * Set numberOfTickets.
+     *
+     * @param int $numberOfTickets
+     *
+     * @return Command
+     */
+    public function setNumberOfTickets($numberOfTickets)
+    {
+        $this->numberOfTickets = $numberOfTickets;
+
+        return $this;
+    }
+
+    /**
+     * Get numberOfTickets.
+     *
+     * @return int
+     */
+    public function getNumberOfTickets()
+    {
+        return $this->numberOfTickets;
     }
 }
