@@ -15,7 +15,7 @@ class CommandController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showCommandFormAction(Request $request)
+    public function commandAction(Request $request)
     {
         $command = new Command();
         $commandForm = $this->createForm(CommandType::class, $command);
@@ -38,7 +38,7 @@ class CommandController extends Controller
                 $request->getSession()->set('command', $command);
 
                 // Redirection vers le second formulaire auquel on passe l'objet $command
-                return $this->redirectToRoute('app_show_tickets_forms');
+                return $this->redirectToRoute('app_tickets');
             }
         }
 
@@ -49,7 +49,7 @@ class CommandController extends Controller
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showTicketsFormsAction(Request $request)
+    public function ticketsAction(Request $request)
     {
         $command = $request->getSession()->get('command');
         $grammar = $command->getNumberOfTickets() > 1 ? ' billets' : ' billet';
@@ -85,7 +85,6 @@ class CommandController extends Controller
 
                 // on complète les champs vides de la commande
                 $command->setTotalPrice($totalPrice);
-                $command->setVisitorsNames($visitorsNames);
                 $command->setReservationDate(new \DateTime());
 
                 $request->getSession()->set('command', $command);

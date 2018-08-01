@@ -2,15 +2,15 @@ app:
     resource: '@AppBundle/Controller/'
     type: annotation
 
-app_show_command_form:
-    path:      /showform
+app_command:
+    path:      /command
     defaults:
-        _controller: AppBundle:Command:showCommandForm
+        _controller: AppBundle:Command:command
 
-app_show_tickets_forms:
-    path:      /showticketsforms
+app_tickets:
+    path:      /tickets
     defaults:
-        _controller: AppBundle:Command:showTicketsForms
+        _controller: AppBundle:Command:tickets
 
 app_bill:
     path:      /bill
