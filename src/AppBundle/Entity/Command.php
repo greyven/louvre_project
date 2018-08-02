@@ -82,6 +82,13 @@ class Command
      */
     private $tickets;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="chargeId", type="string", length=255)
+     */
+    private $chargeId;
+
 
 
     /**
@@ -280,5 +287,29 @@ class Command
     public function getNumberOfTickets()
     {
         return $this->numberOfTickets;
+    }
+
+    /**
+     * Set chargeId.
+     *
+     * @param string $chargeId
+     *
+     * @return Command
+     */
+    public function setChargeId($chargeId)
+    {
+        $this->chargeId = $chargeId;
+
+        return $this;
+    }
+
+    /**
+     * Get chargeId.
+     *
+     * @return string
+     */
+    public function getChargeId()
+    {
+        return $this->chargeId;
     }
 }
