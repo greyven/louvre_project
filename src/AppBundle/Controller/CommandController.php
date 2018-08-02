@@ -95,8 +95,9 @@ class CommandController extends Controller
     {
         $command = $request->getSession()->get('command');
         $request->getSession()->set('command', $command);
+        dump($command);
 
-        if ($request->isMethod('POST'))
+        if(($command->getChargeId() == null) && ($request->isMethod('POST')))
         {
             // Get the credit card details submitted by the form
             \Stripe\Stripe::setApiKey($this->getParameter('stripe_secret_key'));
@@ -106,21 +107,41 @@ class CommandController extends Controller
             try
             {
                 $charge = \Stripe\Charge::create(array(
-                    "amount" => $command->getTotalPrice(), // Amount in cents
+                    "amount" => $command->getTotalPrice() * 100, // Amount in cents
                     "currency" => "eur",
                     "source" => $token,
-                    "description" => "Paiement de votre commande"
+                    "description" => "Commande"
                 ));
-                dump($charge);
+
+                $command->setChargeId($charge->id);
+
                 $this->addFlash("success", "Paiement éffectué !");
+
+                $request->getSession()->set('command', $command);
+
                 return $this->redirectToRoute("app_command_prepare");
             }
             catch(\Stripe\Error\Card $e)
             {
                 $this->addFlash("error", "Erreur, paiement non éffectué !");
+
                 return $this->redirectToRoute("app_command_prepare");
                 // The card has been declined
             }
+        }
+        elseif($command->getChargeId() !== null)
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($command);
+
+            foreach ($command->getTickets() as $ticket)
+            {
+                $em->persist($ticket);
+            }
+
+            $em->flush();
+
+            $this->addFlash("success", "Entitées sauvegardées !");
         }
 
         return $this->render('prepare.html.twig',
