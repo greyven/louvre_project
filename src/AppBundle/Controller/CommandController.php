@@ -2,10 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Ticket;
 use AppBundle\Form\TicketFormCollectionType;
+use AppBundle\Manager\CommandManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Entity\Command;
 use AppBundle\Form\CommandType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,145 +12,85 @@ class CommandController extends Controller
 {
     /**
      * @param Request $request
+     * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function commandAction(Request $request)
+    public function commandAction(Request $request, CommandManager $commandManager)
     {
-        $command = new Command();
+        $command = $commandManager->initCommand();
         $commandForm = $this->createForm(CommandType::class, $command);
 
-
-        // Récupère les données du Form et hydrate $command
         $commandForm->handleRequest($request);
 
-        // Si on a des données 'POST' et Valides, c'est que le formulaire a été envoyé donc on le traite
-        if($commandForm->isSubmitted() && $commandForm->isValid())
+        if ($commandForm->isSubmitted() && $commandForm->isValid())
         {
-            // insertion des tickets vides
-            for($i = 0 ; $i < $command->getNumberOfTickets(); $i++ )
-            {
-                $command->addTicket(new Ticket());
-            }
-
-            // sauvegarde $command en variable session
-            $request->getSession()->set('command', $command);
-
-            // Redirection vers le second formulaire auquel on passe l'objet $command
+            $commandManager->generateTickets($command);
             return $this->redirectToRoute('app_tickets');
         }
 
-        // Soit le visiteur arrive sur la page, soit des données du formulaire ne sont pas valides
         return $this->render('command.html.twig', array('commandForm' => $commandForm->createView()));
     }
 
     /**
      * @param Request $request
+     * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function ticketsAction(Request $request)
+    public function ticketsAction(Request $request, CommandManager $commandManager)
     {
-        $command = $request->getSession()->get('command');
-        $grammar = $command->getNumberOfTickets() > 1 ? ' billets' : ' billet';
-        $halfDay = $command->getFullDay() ? ' demi-journée' : ' journée';
-        $recap = 'Vous souhaitez réserver '.$command->getNumberOfTickets().$grammar.$halfDay.
-        ' pour le '.$command->getVisitDate()->format('d-m-Y').'.';
-
+        $command = $commandManager->getCurrentCommand();
         $ticketsCollection = $this->createForm(TicketFormCollectionType::class, $command);
 
-
-        // Récupère les données des forms et hydrate $command
         $ticketsCollection->handleRequest($request);
 
-        // Si on a des données 'POST' et Valides, c'est que le formulaire a été envoyé donc on le traite
-        if($ticketsCollection->isSubmitted() && $ticketsCollection->isValid())
+        if ($ticketsCollection->isSubmitted() && $ticketsCollection->isValid())
         {
-            $totalPrice = 0;
-
-            // On persist chaque $ticket dans la collection
-            foreach ($command->getTickets() as $ticket)
-            {
-                $ticketPrice = $ticket->defineAndSetTicketPrice();
-                $totalPrice = $totalPrice + $ticketPrice;
-            }
-
-            // on complète les champs vides de la commande
-            $command->setTotalPrice($totalPrice);
-            $command->setReservationDate(new \DateTime());
-
-            $request->getSession()->set('command', $command);
-            // Redirection vers la page de paiement
+            $commandManager->completeCommand();
             return $this->redirectToRoute('app_command_payment');
         }
 
-        // Sinon le visiteur arrive sur la page, ou bien des données du formulaire ne sont pas valides
         return $this->render('tickets.html.twig',
-            array(
-                'ticketsCollection' => $ticketsCollection->createView(),
-                'command' => $command,
-                'recap' => $recap
+            array('ticketsCollection' => $ticketsCollection->createView(), 'recap' => $commandManager->getCommandRecap()
         ));
     }
 
     /**
      * @param Request $request
+     * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function paymentAction(Request $request)
+    public function paymentAction(Request $request, CommandManager $commandManager)
     {
-        $command = $request->getSession()->get('command');
-        $request->getSession()->set('command', $command);
-        dump($command);
-
-        if(($command->getChargeId() == null) && ($request->isMethod('POST')))
+        if ($request->isMethod('POST'))
         {
-            // Get the credit card details submitted by the form
-            \Stripe\Stripe::setApiKey($this->getParameter('stripe_secret_key'));
-            $token = $request->get('stripeToken');
-
-            // Create a charge: this will charge the user's card
             try
             {
-                $charge = \Stripe\Charge::create(array(
-                    "amount" => $command->getTotalPrice() * 100, // Amount in cents
-                    "currency" => "eur",
-                    "source" => $token,
-                    "description" => "Commande"
-                ));
-
-                $command->setChargeId($charge->id);
-
+                $commandManager->payAndSaveCommand($request);
                 $this->addFlash("success", "Paiement éffectué !");
-
-                $request->getSession()->set('command', $command);
-
-                return $this->redirectToRoute("app_command_payment");
+                return $this->redirectToRoute("app_command_confirm");
             }
-            catch(\Stripe\Error\Card $e)
+            catch (\Stripe\Error\Card $e)
             {
                 $this->addFlash("error", "Erreur, paiement non éffectué !");
-
                 return $this->redirectToRoute("app_command_payment");
                 // The card has been declined
             }
         }
-        elseif($command->getChargeId() !== null)
-        {
-            // Si l'Id n'existe pas, on persist et flush les données
-            if($command->getId() == null)
-            {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($command);
 
-                foreach ($command->getTickets() as $ticket)
-                {
-                    $em->persist($ticket);
-                }
-
-                $em->flush();
-            }
-        }
-
+        $command = $commandManager->getCurrentCommand();
         return $this->render('payment.html.twig',
             array('stripe_public_key' => $this->getParameter('stripe_public_key'), 'command' => $command));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function confirmAction(Request $request)
+    {
+        $command = $request->getSession()->get('command');
+        $request->getSession()->remove('command');
+
+        return $this->render('confirm.html.twig', ['command' => $command]);
     }
 }
