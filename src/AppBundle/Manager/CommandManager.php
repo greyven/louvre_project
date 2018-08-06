@@ -58,6 +58,7 @@ class CommandManager
         $command = $this->getCurrentCommand();
         $totalPrice = 0;
 
+        /** @var Ticket $ticket */
         foreach ($command->getTickets() as $ticket) {
             $ticketPrice = $ticket->defineAndSetTicketPrice();
             $totalPrice = $totalPrice + $ticketPrice;
