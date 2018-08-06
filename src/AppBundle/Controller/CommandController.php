@@ -41,10 +41,11 @@ class CommandController extends Controller
         }
 
         // Soit le visiteur arrive sur la page, soit des données du formulaire ne sont pas valides
-        return $this->render('commandForm.html.twig', array('commandForm' => $commandForm->createView()));
+        return $this->render('command.html.twig', array('commandForm' => $commandForm->createView()));
     }
 
     /**
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function ticketsAction(Request $request)
@@ -79,7 +80,7 @@ class CommandController extends Controller
 
             $request->getSession()->set('command', $command);
             // Redirection vers la page de paiement
-            return $this->redirectToRoute('app_command_prepare');
+            return $this->redirectToRoute('app_command_payment');
         }
 
         // Sinon le visiteur arrive sur la page, ou bien des données du formulaire ne sont pas valides
@@ -91,7 +92,11 @@ class CommandController extends Controller
         ));
     }
 
-    public function prepareAction(Request $request)
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function paymentAction(Request $request)
     {
         $command = $request->getSession()->get('command');
         $request->getSession()->set('command', $command);
@@ -119,13 +124,13 @@ class CommandController extends Controller
 
                 $request->getSession()->set('command', $command);
 
-                return $this->redirectToRoute("app_command_prepare");
+                return $this->redirectToRoute("app_command_payment");
             }
             catch(\Stripe\Error\Card $e)
             {
                 $this->addFlash("error", "Erreur, paiement non éffectué !");
 
-                return $this->redirectToRoute("app_command_prepare");
+                return $this->redirectToRoute("app_command_payment");
                 // The card has been declined
             }
         }
@@ -146,7 +151,7 @@ class CommandController extends Controller
             }
         }
 
-        return $this->render('prepare.html.twig',
+        return $this->render('payment.html.twig',
             array('stripe_public_key' => $this->getParameter('stripe_public_key'), 'command' => $command));
     }
 }

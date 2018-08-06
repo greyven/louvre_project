@@ -12,7 +12,7 @@ app_tickets:
     defaults:
         _controller: AppBundle:Command:tickets
 
-app_command_prepare:
-    path:      /command/prepare
+app_command_payment:
+    path:      /command/payment
     defaults:
-        _controller: AppBundle:Command:prepare
+        _controller: AppBundle:Command:payment
