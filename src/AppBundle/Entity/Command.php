@@ -104,8 +104,7 @@ class Command
     /**
      * Set ticketType.
      *
-     * @param bool $ticketType
-     *
+     * @param $fullDay
      * @return Command
      */
     public function setFullDay($fullDay)
@@ -225,7 +224,7 @@ class Command
      */
     public function __construct()
     {
-        $this->tickets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tickets = new ArrayCollection();
     }
 
     /**
@@ -235,7 +234,7 @@ class Command
      *
      * @return Command
      */
-    public function addTicket(\AppBundle\Entity\Ticket $ticket)
+    public function addTicket(Ticket $ticket)
     {
         $this->tickets[] = $ticket;
         $ticket->setCommand($this);
@@ -250,7 +249,7 @@ class Command
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeTicket(\AppBundle\Entity\Ticket $ticket)
+    public function removeTicket(Ticket $ticket)
     {
         return $this->tickets->removeElement($ticket);
     }

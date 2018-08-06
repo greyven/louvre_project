@@ -131,7 +131,6 @@ class Ticket
     }
 
     /**
-     * @param $birthDate
      * @return int
      */
     public function calculateAge()
