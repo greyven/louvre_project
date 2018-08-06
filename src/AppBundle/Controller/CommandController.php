@@ -131,17 +131,19 @@ class CommandController extends Controller
         }
         elseif($command->getChargeId() !== null)
         {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($command);
-
-            foreach ($command->getTickets() as $ticket)
+            // Si l'Id n'existe pas, on persist et flush les données
+            if($command->getId() == null)
             {
-                $em->persist($ticket);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($command);
+
+                foreach ($command->getTickets() as $ticket)
+                {
+                    $em->persist($ticket);
+                }
+
+                $em->flush();
             }
-
-            $em->flush();
-
-            $this->addFlash("success", "Entitées sauvegardées !");
         }
 
         return $this->render('prepare.html.twig',
