@@ -17,6 +17,11 @@ app_command_payment:
     defaults:
         _controller: AppBundle:Command:payment
 
+app_command_confirm:
+    path:      /command/confirm
+    defaults:
+        _controller: AppBundle:Command:confirm
+
 app_home:
     path:       /home
     defaults:
