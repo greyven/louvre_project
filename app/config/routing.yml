@@ -16,3 +16,13 @@ app_command_payment:
     path:      /command/payment
     defaults:
         _controller: AppBundle:Command:payment
+
+app_home:
+    path:       /home
+    defaults:
+        _controller: AppBundle:Home:home
+
+app_contact:
+    path:       /contact
+    defaults:
+        _controller: AppBundle:Contact:contact
