@@ -6,7 +6,7 @@
     <div id="wrapper">
         <div id="container">
             <div id="welcome">
-                <h1><span>Test Stripe</span> Essai de paiement en mode 'Test'</h1>
+                <h1>Paiement de votre commande:</h1>
             </div>
 
             {% if command.chargeId is null %}
@@ -28,10 +28,11 @@
                                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                                 data-key="{{ stripe_public_key }}"
                                 data-amount="{{ command.totalPrice * 100 }}"
-                                data-name="Paiement commande"
-                                data-description="Paiement de votre commande"
+                                data-name="Paiement Stripe"
+                                data-description="commande de billet(s)"
                                 data-locale="auto"
-                                data-currency="eur">
+                                data-currency="eur"
+                                data-email="{{ command.visitorEmail }}">
                         </script>
                     </form>
                     </p>
@@ -42,6 +43,15 @@
                     {% for message in app.session.flashbag.get('success') %}
                         <p>{{ message }}</p>
                     {% endfor %}
+                    <p>
+                        Vous avez acheté <strong>{{ command.numberOfTickets }}</strong> billet(s) au prix de <strong>{{ command.totalPrice }}€</strong>.
+                        <br/>
+                        Votre identifiant de commande est : <strong>{{ command.id }}</strong>
+                        <br/>
+                        Votre identifiant de transaction bancaire est : <strong>{{ command.chargeId }}</strong>
+                        <br/>
+                        Un email vous sera envoyé à l'adresse <strong>{{ command.visitorEmail }}</strong> quand la fonction sera codée.
+                    </p>
                 </div>
                 </div>
             {% endif %}
