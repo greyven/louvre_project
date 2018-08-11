@@ -5,7 +5,9 @@ namespace AppBundle\Manager;
 
 use AppBundle\Entity\Command;
 use AppBundle\Entity\Ticket;
+use AppBundle\Service\Pay;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 class CommandManager
 {
@@ -13,10 +15,20 @@ class CommandManager
      * @var SessionInterface
      */
     private $session;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+    /**
+     * @var Pay
+     */
+    private $pay;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(SessionInterface $session, EntityManagerInterface $em, Pay $pay)
     {
         $this->session = $session;
+        $this->em = $em;
+        $this->pay = $pay;
     }
 
     /**
@@ -89,49 +101,29 @@ class CommandManager
     }
 
     /**
-     * @param Request $request
-     * @return mixed
+     * @param Command $command
      */
-    public function getCardToken(Request $request)
+    public function persistAndFlushCommand(Command $command)
     {
-        // Get the credit card details submitted by the form
-        \Stripe\Stripe::setApiKey($this->getParameter('stripe_secret_key'));
-        return $request->get('stripeToken');
+        $this->em->persist($command);
+        $this->em->flush();
     }
 
     /**
-     * @param Request $request
+     * @param Command $command
+     * @return bool
      */
-    public function createCharge(Request $request)
+    public function payAndSaveCommand(Command $command)
     {
-        $command = $this->getCurrentCommand();
-        $charge = \Stripe\Charge::create(array(
-            "amount" => $command->getTotalPrice() * 100, // Amount in cents
-            "currency" => "eur",
-            "source" => $this->getCardToken($request),
-            "description" => "Commande"
-        ));
+        $transactionId = $this->pay->createCharge($command->getTotalPrice(), "Commande");
+        if($transactionId !== false)
+        {
+            $command->setChargeId($transactionId);
+            $this->persistAndFlushCommand($command);
+            //TODO envoyer mail
+            return true;
+        }
 
-        $command->setChargeId($charge['id']);
-    }
-
-    /**
-     *
-     */
-    public function persistAndFlushCommand()
-    {
-        $command = $this->getCurrentCommand();
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($command);
-        $em->flush();
-    }
-
-    /**
-     * @param Request $request
-     */
-    public function payAndSaveCommand(Request $request)
-    {
-        $this->createCharge($request);
-        $this->persistAndFlushCommand();
+        return false;
     }
 }

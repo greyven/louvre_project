@@ -25,6 +25,7 @@ class CommandController extends Controller
         if ($commandForm->isSubmitted() && $commandForm->isValid())
         {
             $commandManager->generateTickets($command);
+
             return $this->redirectToRoute('app_tickets');
         }
 
@@ -61,11 +62,13 @@ class CommandController extends Controller
      */
     public function paymentAction(Request $request, CommandManager $commandManager)
     {
+        $command = $commandManager->getCurrentCommand();
+
         if ($request->isMethod('POST'))
         {
             try
             {
-                $commandManager->payAndSaveCommand($request);
+                $commandManager->payAndSaveCommand($command);
                 $this->addFlash("success", "Paiement éffectué !");
                 return $this->redirectToRoute("app_command_confirm");
             }
@@ -77,7 +80,6 @@ class CommandController extends Controller
             }
         }
 
-        $command = $commandManager->getCurrentCommand();
         return $this->render('payment.html.twig',
             array('stripe_public_key' => $this->getParameter('stripe_public_key'), 'command' => $command));
     }
@@ -88,9 +90,16 @@ class CommandController extends Controller
      */
     public function confirmAction(Request $request)
     {
-        $command = $request->getSession()->get('command');
-        $request->getSession()->remove('command');
+        try
+        {
+            $command = $request->getSession()->get('command');
+            $request->getSession()->remove('command');
 
-        return $this->render('confirm.html.twig', ['command' => $command]);
+            return $this->render('confirm.html.twig', ['command' => $command]);
+        }
+        catch(\Exception $e)
+        {
+            return $this->redirectToRoute("app_command");
+        }
     }
 }
