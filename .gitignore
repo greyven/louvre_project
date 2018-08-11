@@ -22,3 +22,4 @@ src/AppBundle/Entity/Ticket.php~
 src/AppBundle/Entity/Command.php~
 *.php~
 *.php~
+.idea/workspace.xml___jb_tmp___
