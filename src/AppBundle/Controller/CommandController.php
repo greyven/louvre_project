@@ -97,7 +97,7 @@ class CommandController extends Controller
             $request->getSession()->remove('command');
 
             $mailRecap = $commandManager->sendMail($command);
-            
+
             return $this->render('confirm.html.twig', ['command' => $command, 'mailRecap' => $mailRecap]);
         }
         catch(\Exception $e)
