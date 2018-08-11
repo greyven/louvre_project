@@ -21,6 +21,7 @@
     },
     "require": {
         "php": ">=7.1.9",
+        "ext-calendar": "^7.1",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
@@ -72,5 +73,6 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": null
-    }
+    },
+    "description": ""
 }
