@@ -86,16 +86,19 @@ class CommandController extends Controller
 
     /**
      * @param Request $request
+     * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function confirmAction(Request $request)
+    public function confirmAction(Request $request, CommandManager $commandManager)
     {
         try
         {
             $command = $request->getSession()->get('command');
             $request->getSession()->remove('command');
 
-            return $this->render('confirm.html.twig', ['command' => $command]);
+            $mailRecap = $commandManager->sendMail($command);
+            
+            return $this->render('confirm.html.twig', ['command' => $command, 'mailRecap' => $mailRecap]);
         }
         catch(\Exception $e)
         {

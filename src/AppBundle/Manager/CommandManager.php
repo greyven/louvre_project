@@ -136,8 +136,7 @@ class CommandManager
 
     /**
      * @param Command $command
-     * @param Swift_Mailer $mailer
-     * @return int
+     * @return string
      */
     public function sendMail(Command $command)
     {
@@ -150,6 +149,14 @@ class CommandManager
 
         // Send the message
         $result = $this->mailer->send($message);
-        return $result;
+
+        $mailRecap = $result > 0 ? "Un email contenant les informations de votre commande a été envoyé à l'adresse " .
+            "<strong>" . $command->getVisitorEmail() . "</strong>."
+            :
+            "Une erreur est survenue durant l'envoi de l'email vers votre adresse " .
+            "<strong>" . $command->getVisitorEmail() . "</strong>. Veuillez faire une capture d'écran ou " .
+            "noter les informations qui sont affichée sur ce récapitulatif.";
+
+        return $mailRecap;
     }
 }
