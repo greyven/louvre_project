@@ -33,3 +33,7 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    AppBundle\Service\Pay:
+        arguments:
+            $stripeSecretKey: "%stripe_secret_key%"
