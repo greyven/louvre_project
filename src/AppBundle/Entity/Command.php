@@ -5,12 +5,15 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Validator\Constraints;
 
 /**
  * Command
  *
  * @ORM\Table(name="command")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CommandRepository")
+ *
+ * @Constraints\OneThousandTicketsMax()
  */
 class Command
 {
@@ -38,6 +41,8 @@ class Command
      * @var bool
      *
      * @ORM\Column(name="fullDay", type="boolean")
+     *
+     * @Constraints\PassedTwoPm()
      */
     private $fullDay;
 
@@ -45,8 +50,13 @@ class Command
      * @var \DateTime
      *
      * @Assert\Date()
+     * @Assert\GreaterThanOrEqual("today")
      *
      * @ORM\Column(name="visitDate", type="datetime")
+     *
+     * @Constraints\NotSunday()
+     * @Constraints\NotTuesday()
+     * @Constraints\NotPublicHoliday()
      */
     private $visitDate;
 
