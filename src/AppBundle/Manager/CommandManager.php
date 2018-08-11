@@ -6,6 +6,8 @@ namespace AppBundle\Manager;
 use AppBundle\Entity\Command;
 use AppBundle\Entity\Ticket;
 use AppBundle\Service\Pay;
+use Swift_Mailer;
+use Swift_Message;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -23,12 +25,17 @@ class CommandManager
      * @var Pay
      */
     private $pay;
+    /**
+     * @var Swift_Mailer
+     */
+    private $mailer;
 
-    public function __construct(SessionInterface $session, EntityManagerInterface $em, Pay $pay)
+    public function __construct(SessionInterface $session, EntityManagerInterface $em, Pay $pay, Swift_Mailer $mailer)
     {
         $this->session = $session;
         $this->em = $em;
         $this->pay = $pay;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -125,5 +132,24 @@ class CommandManager
         }
 
         return false;
+    }
+
+    /**
+     * @param Command $command
+     * @param Swift_Mailer $mailer
+     * @return int
+     */
+    public function sendMail(Command $command)
+    {
+        // Create a message
+        $message = (new Swift_Message('Wonderful Subject'))
+            ->setFrom(['stephen.sere@seyssinet-pariset.com' => 'Stef'])
+            ->setTo([$command->getVisitorEmail()])
+            ->setBody('Here is the message itself')
+        ;
+
+        // Send the message
+        $result = $this->mailer->send($message);
+        return $result;
     }
 }
