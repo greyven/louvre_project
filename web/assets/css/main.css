@@ -18,8 +18,8 @@ li
     justify-content: center;
     margin-right: 1px;
 }
-/*Style for menu links*/
-li a {
+li a
+{
     display:block;
     min-width:140px;
     height: 50px;
@@ -30,11 +30,18 @@ li a {
     background: #2f3036;
     text-decoration: none;
 }
-/*Hover state for top level links*/
-li:hover a {
+li:hover a
+{
     background: #413c47;
 }
-/*Prevent text wrapping*/
+li a:hover
+{
+    color: #FFFFFF;
+}
+li a:active
+{
+    color: coral;
+}
 li ul li a {
     width: auto;
     min-width: 100px;
