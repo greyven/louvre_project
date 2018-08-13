@@ -5,6 +5,7 @@ namespace AppBundle\Manager;
 
 use AppBundle\Entity\Command;
 use AppBundle\Entity\Ticket;
+use AppBundle\Exception\CommandNotFoundException;
 use AppBundle\Service\Pay;
 use Swift_Mailer;
 use Swift_Message;
@@ -53,7 +54,15 @@ class CommandManager
      */
     public function getCurrentCommand()
     {
-        return $this->session->get('command');
+        $command = $this->session->get('command');
+        if($command instanceof Command)
+        {
+            return $command;
+        }
+        else
+        {
+            throw new CommandNotFoundException("La commande n'existe pas.");
+        }
     }
 
     /**
@@ -140,21 +149,21 @@ class CommandManager
      */
     public function sendMail(Command $command)
     {
-        // Create a message
+        // Creer le message
         $message = (new Swift_Message('Wonderful Subject'))
             ->setFrom(['stephen.sere@seyssinet-pariset.com' => 'Stef'])
             ->setTo([$command->getVisitorEmail()])
             ->setBody('Here is the message itself')
         ;
 
-        // Send the message
+        // Envoyer le message
         $result = $this->mailer->send($message);
 
         $mailRecap = $result > 0 ? "Un email contenant les informations de votre commande a été envoyé à l'adresse " .
-            "<strong>" . $command->getVisitorEmail() . "</strong>."
+            "<b>" . $command->getVisitorEmail() . "</b>."
             :
             "Une erreur est survenue durant l'envoi de l'email vers votre adresse " .
-            "<strong>" . $command->getVisitorEmail() . "</strong>. Veuillez faire une capture d'écran ou " .
+            "<b>" . $command->getVisitorEmail() . "</b>. Veuillez faire une capture d'écran ou " .
             "noter les informations qui sont affichée sur ce récapitulatif.";
 
         return $mailRecap;

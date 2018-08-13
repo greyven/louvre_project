@@ -36,6 +36,7 @@ class CommandController extends Controller
      * @param Request $request
      * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
     public function ticketsAction(Request $request, CommandManager $commandManager)
     {
@@ -93,7 +94,7 @@ class CommandController extends Controller
     {
         try
         {
-            $command = $request->getSession()->get('command');
+            $command = $commandManager->getCurrentCommand();
             $request->getSession()->remove('command');
 
             $mailRecap = $commandManager->sendMail($command);
