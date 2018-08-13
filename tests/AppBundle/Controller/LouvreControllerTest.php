@@ -37,7 +37,7 @@ class LouvreControllerTest extends WebTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        echo $client->getResponse()->getContent();
+       // echo $client->getResponse()->getContent();
     }
 
     public function testCommand()
