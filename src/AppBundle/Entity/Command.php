@@ -14,6 +14,7 @@ use AppBundle\Validator\Constraints;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CommandRepository")
  *
  * @Constraints\OneThousandTicketsMax()
+ * @Constraints\PassedTwoPm()
  */
 class Command
 {
@@ -41,8 +42,6 @@ class Command
      * @var bool
      *
      * @ORM\Column(name="fullDay", type="boolean")
-     *
-     * @Constraints\PassedTwoPm()
      */
     private $fullDay;
 
@@ -50,7 +49,7 @@ class Command
      * @var \DateTime
      *
      * @Assert\Date()
-     * @Assert\GreaterThanOrEqual("today")
+     * @Assert\GreaterThanOrEqual("today", message="Vous ne pouvez pas réserver pour une date passée.")
      *
      * @ORM\Column(name="visitDate", type="datetime")
      *
