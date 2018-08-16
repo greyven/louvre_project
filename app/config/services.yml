@@ -37,3 +37,13 @@ services:
     AppBundle\Service\Pay:
         arguments:
             $stripeSecretKey: "%stripe_secret_key%"
+
+    AppBundle\Service\Mailer:
+        arguments:
+            - "@Swift_Mailer"
+            - "@Twig_Environment"
+            - %mail_sender%
+
+    AppBundle\EventSubscriber\CommandNotFoundSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
