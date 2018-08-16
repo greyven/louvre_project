@@ -102,6 +102,7 @@ class CommandController extends Controller
         $command = $commandManager->getCurrentCommand();
         $request->getSession()->remove('command');
 
+        /** @var int $mailResult (int The number of successful recipients. Can be 0 which indicates failure) */
         $mailResult = $mailer->sendConfirmationMail($command);
 
         return $this->render('confirm.html.twig', ['command' => $command, 'mailResult' => $mailResult]);

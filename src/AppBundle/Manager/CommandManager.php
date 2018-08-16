@@ -138,7 +138,6 @@ class CommandManager
         {
             $command->setChargeId($transactionId);
             $this->persistAndFlushCommand($command);
-            //TODO envoyer mail
             return true;
         }
 
