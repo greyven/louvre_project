@@ -3,17 +3,74 @@
 
 {% block body %}
 
-    <h3 class="text-center">Complétion des tickets</h3>
+    <br/>
+    <br/>
+    <h1 class="text-center">Complétion des tickets</h1>
+    <br/>
 
     <div class="row">
-        <div class="col-md-offset-3 col-md-6">
+        <div class="col-md-offset-2 col-md-8">
             <div class="well">
 
-                <p>Récapitulatif : {{ recap }}</p>
+                <p>
+                    <strong>Récapitulatif :</strong> Vous souhaitez réserver <strong>{{ command.numberOfTickets }}</strong>
+                    {% if command.numberOfTickets > 1 %}
+                        billets
+                    {% else %}
+                        billet
+                    {% endif %}
+                    {% if command.fullDay %}
+                        <strong>journée</strong>
+                    {% else %}
+                        <strong>demi-journée</strong>
+                    {% endif %}
+                    pour le <strong>{{  command.visitDate|date("d/m/Y") }}</strong>.
+                </p>
 
                 {{ form_start(ticketsCollection) }}
-                {{ form_row(ticketsCollection) }}
-                <input type="submit" value="Valider" class="btn btn-default" />
+
+                {% for ticket in ticketsCollection.tickets %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr class="style12">
+                        </div>
+                        <div class="col-md-12">
+                            <h4><strong>Billet n°{{ ticket.vars.name }}</strong></h4>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(ticket.lastName) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(ticket.firstName) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="alignItems">
+                                    <div class="col-md-5">
+                                        {{ form_row(ticket.birthDate) }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {{ form_row(ticket.country) }}
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        {{ form_row(ticket.reducedPrice) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <hr class="style12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="horizAlignCenter">
+                            <input type="submit" value="Valider" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
                 {{ form_end(ticketsCollection) }}
 
             </div>
