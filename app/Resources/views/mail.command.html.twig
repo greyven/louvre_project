@@ -102,7 +102,7 @@
                         Les réservations sont éffectuées pour les personnes suivantes :
                     </p>
                     {% for ticket in command.tickets %}
-                        - {{ ticket.vars.firstName }} {{ ticket.vars.lastName }}
+                        - {{ ticket.firstName }} {{ ticket.lastName }}
                         <br/>
                     {% endfor %}
                     <br>Le prix total de votre commande est de {{ command.totalPrice }}€.

@@ -15,13 +15,21 @@
                     <p>{{ message }}</p>
                 {% endfor %}
                 <p>
-                    Vous avez acheté <strong>{{ command.numberOfTickets }}</strong> billet(s) au prix de <strong>{{ command.totalPrice }}€</strong>.
+                    Vous avez acheté <strong>{{ command.numberOfTickets }}</strong> billet(s) au prix de
+                    <strong>{{ command.totalPrice }}€</strong>.
                     <br/>
                     Votre identifiant de commande est : <strong>{{ command.id }}</strong>
                     <br/>
                     Votre identifiant de transaction bancaire est : <strong>{{ command.chargeId }}</strong>
                     <br/>
-                    {{ mailRecap }}
+                    {% if mailResult > 0 %}
+                        Un email contenant les informations de votre commande a été envoyé à l'adresse
+                        <strong>{{ command.visitorEmail }}</strong>.
+                    {% else %}
+                        Une erreur est survenue durant l'envoi de l'email vers l'adresse
+                        <strong>{{ command.visitorEmail }}</strong>. Veuillez faire une capture d'écran ou noter les
+                        informations qui sont affichée sur ce récapitulatif.
+                    {% endif %}
                 </p>
             </div>
         </div>
