@@ -33,12 +33,12 @@ class Mailer
 
     /**
      * @param Command $command
-     * @return Swift_Message
+     * @return int
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function sendConfirmationMail(Command $command)
+    public function sendMail(Command $command)
     {
         $body = $this->twig->render('mail.command.html.twig',['command'=>$command]);
 
@@ -52,5 +52,4 @@ class Mailer
         // Envoyer le message
         return $this->swift_Mailer->send($message);
     }
-
 }
