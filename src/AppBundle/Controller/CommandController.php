@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Form\TicketFormCollectionType;
 use AppBundle\Manager\CommandManager;
+use AppBundle\Service\Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Form\CommandType;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,14 +53,15 @@ class CommandController extends Controller
         }
 
         return $this->render('tickets.html.twig',
-            array('ticketsCollection' => $ticketsCollection->createView(), 'recap' => $commandManager->getCommandRecap()
-        ));
+            array('ticketsCollection' => $ticketsCollection->createView(), 'command' => $command))
+        ;
     }
 
     /**
      * @param Request $request
      * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \AppBundle\Exception\CommandNotFoundException
      */
     public function paymentAction(Request $request, CommandManager $commandManager)
     {
@@ -88,22 +90,20 @@ class CommandController extends Controller
     /**
      * @param Request $request
      * @param CommandManager $commandManager
+     * @param Mailer $mailer
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \AppBundle\Exception\CommandNotFoundException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
-    public function confirmAction(Request $request, CommandManager $commandManager)
+    public function confirmAction(Request $request, CommandManager $commandManager, Mailer $mailer)
     {
-        try
-        {
-            $command = $commandManager->getCurrentCommand();
-            $request->getSession()->remove('command');
+        $command = $commandManager->getCurrentCommand();
+        $request->getSession()->remove('command');
 
-            $mailRecap = $commandManager->sendMail($command);
+        $mailResult = $mailer->sendConfirmationMail($command);
 
-            return $this->render('confirm.html.twig', ['command' => $command, 'mailRecap' => $mailRecap]);
-        }
-        catch(\Exception $e)
-        {
-            return $this->redirectToRoute("app_command");
-        }
+        return $this->render('confirm.html.twig', ['command' => $command, 'mailResult' => $mailResult]);
     }
 }
