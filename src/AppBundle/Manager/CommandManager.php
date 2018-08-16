@@ -8,7 +8,6 @@ use AppBundle\Entity\Ticket;
 use AppBundle\Exception\CommandNotFoundException;
 use AppBundle\Service\Pay;
 use Swift_Mailer;
-use Swift_Message;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -29,14 +28,14 @@ class CommandManager
     /**
      * @var Swift_Mailer
      */
-    private $mailer;
+    private $swift_Mailer;
 
-    public function __construct(SessionInterface $session, EntityManagerInterface $em, Pay $pay, Swift_Mailer $mailer)
+    public function __construct(SessionInterface $session, EntityManagerInterface $em, Pay $pay, Swift_Mailer $swift_Mailer)
     {
         $this->session = $session;
         $this->em = $em;
         $this->pay = $pay;
-        $this->mailer = $mailer;
+        $this->swift_Mailer = $swift_Mailer;
     }
 
     /**
@@ -51,6 +50,7 @@ class CommandManager
 
     /**
      * @return Command
+     * @throws CommandNotFoundException
      */
     public function getCurrentCommand()
     {
@@ -67,6 +67,7 @@ class CommandManager
 
     /**
      * @return string
+     * @throws CommandNotFoundException
      */
     public function getCommandRecap()
     {
@@ -80,6 +81,7 @@ class CommandManager
 
     /**
      * @return int
+     * @throws CommandNotFoundException
      */
     public function getTotalPrice()
     {
@@ -95,7 +97,7 @@ class CommandManager
     }
 
     /**
-     *
+     * @throws CommandNotFoundException
      */
     public function completeCommand()
     {
@@ -141,31 +143,5 @@ class CommandManager
         }
 
         return false;
-    }
-
-    /**
-     * @param Command $command
-     * @return string
-     */
-    public function sendMail(Command $command)
-    {
-        // Creer le message
-        $message = (new Swift_Message('Wonderful Subject'))
-            ->setFrom(['stephen.sere@seyssinet-pariset.com' => 'Stef'])
-            ->setTo([$command->getVisitorEmail()])
-            ->setBody('Here is the message itself')
-        ;
-
-        // Envoyer le message
-        $result = $this->mailer->send($message);
-
-        $mailRecap = $result > 0 ? "Un email contenant les informations de votre commande a été envoyé à l'adresse " .
-            "<b>" . $command->getVisitorEmail() . "</b>."
-            :
-            "Une erreur est survenue durant l'envoi de l'email vers votre adresse " .
-            "<b>" . $command->getVisitorEmail() . "</b>. Veuillez faire une capture d'écran ou " .
-            "noter les informations qui sont affichée sur ce récapitulatif.";
-
-        return $mailRecap;
     }
 }
