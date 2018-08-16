@@ -10,13 +10,22 @@ class PassedTwoPmValidator extends ConstraintValidator
 {
     const HALF_DAY = 14;
 
-    public function validate($value, Constraint $constraint)
+    /**
+     * @param mixed $command
+     * @param Constraint $constraint
+     * @return bool
+     */
+    public function validate($command, Constraint $constraint)
     {
         $hour = date('H', time());
+        $today = date('d/m/Y');
 
-        if($hour >= self::HALF_DAY && $value)
+        if(($hour >= self::HALF_DAY) && ($command->getVisitDate() == $today) && $command->getFullDay())
         {
             $this->context->addViolation($constraint->message);
+            return false;
         }
+
+        return true;
     }
 }
