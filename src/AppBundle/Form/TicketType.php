@@ -22,7 +22,7 @@ class TicketType extends AbstractType
             ->add('lastName', TextType::class, array(
                 'label' => 'Nom : '))
             ->add('firstName', TextType::class, array(
-                    'label' => 'Prénom : '))
+                'label' => 'Prénom : '))
             ->add('country', CountryType::class, array(
                 'label' => 'Pays : ',
                 'preferred_choices' => array('FR')))

@@ -5,10 +5,51 @@
 
     <br/>
     <br/>
-    <div>
-        <h1 class="text-center">Contact</h1>
-        <h4 class="text-center">Besoin d'informations ? Contactez-nous grâce au formulaire.</h4>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <div class="customWell">
+                <h1 class="text-center">Contact</h1>
+                <h4 class="text-center">Besoin d'informations ? Contactez-nous grâce au formulaire.</h4>
+            </div>
+        </div>
     </div>
     <br/>
+
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="well">
+                {{ form_start(contactForm) }}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{  form_row(contactForm.firstName) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(contactForm.lastName) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_row(contactForm.visitorEmail) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_row(contactForm.subject) }}
+                    </div>
+                    <div class="col-md-12">
+                        {{ form_row(contactForm.message,{'attr':{'rows':'5'}}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="horizAlignCenter">
+                            <input type="submit" value="Valider" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(contactForm) }}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
