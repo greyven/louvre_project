@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <title>Commande n°{{ command.id }}</title>
+
+    <style type="text/css">
+        body
+        {
+            background-color: #3f3f3f;
+            color: #919191;
+            margin: 0;
+            padding: 0;
+        }
+        img
+        {
+            width: 534px;
+            border: 0px;
+            display: block;
+        }
+
+        .tableau
+        {
+            width: 100%;
+            border: 0;
+            /*cellpadding: 0;*/
+            /*cellspacing: 0;*/
+        }
+        .header, .footer
+        { background-color: #3f3f3f; }
+        .header tr td, .footer tr td
+        {
+            padding-left: 9px;
+            padding-right: 9px;
+            font-size: 0;
+        }
+        .body
+        { background-color: #bfbfbf; }
+        .base
+        {
+            font-weight: normal;
+            color: #3f3f3f;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: left;
+        }
+        .intro
+        { font-size: 18px; }
+        .noms
+        {
+            font-size: 13px;
+            line-height: normal;
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <!-- header -->
+    <table class="tableau header">
+        <tr>
+            <td align="center" valign="top">
+                Musée du Louvre
+            </td>
+        </tr>
+    </table>
+    <!-- /header -->
+
+
+    <table class="tableau body">
+        <tbody>
+            <tr>
+                <td width="100%" valign="top" align="center">
+                    <div style="display: inline-block;">
+                        <img hspace="0" align="center" vspace="0" src="{{ asset('assets/images/mail_header.jpg') }}">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="base intro" width="100%" valign="top" align="left">
+                    <span>Récapitulatif de votre commande n°{{ command.id }} :</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="base noms" width="100%" valign="top" align="left">
+                    <p> billets journée aux noms suivants :</p>
+                    <p>
+                        <strong>Récapitulatif :</strong> Vous avez commandé <strong>{{ command.numberOfTickets }}</strong>
+                        {% if command.numberOfTickets > 1 %}
+                            billets
+                        {% else %}
+                            billet
+                        {% endif %}
+                        {% if command.fullDay %}
+                            <strong>journée</strong>
+                        {% else %}
+                            <strong>demi-journée</strong>
+                        {% endif %}
+                        pour le <strong>{{  command.visitDate|date("d/m/Y") }}</strong>.
+                        Les réservations sont éffectuées pour les personnes suivantes :
+                    </p>
+                    {% for ticket in command.tickets %}
+                        - {{ ticket.vars.firstName }} {{ ticket.vars.lastName }}
+                        <br/>
+                    {% endfor %}
+                    <br>Le prix total de votre commande est de {{ command.totalPrice }}€.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- footer -->
+    <table class="tableau footer">
+        <tr>
+            <td align="center" valign="top">
+                Musée du Louvre
+            </td>
+        </tr>
+    </table>
+    <!-- /footer -->
+
+
+</body>
+</html>
