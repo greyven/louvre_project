@@ -7,6 +7,7 @@ use AppBundle\Exception\CommandNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 
 class CommandNotFoundSubscriber implements EventSubscriberInterface
@@ -17,7 +18,7 @@ class CommandNotFoundSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         // return the subscribed events, their methods and priorities
-        return array(CommandNotFoundException::class =>  array('redirectToHome', 1));
+        return array(KernelEvents::EXCEPTION =>  array('redirectToHome', 1));
     }
 
     /**
@@ -25,7 +26,7 @@ class CommandNotFoundSubscriber implements EventSubscriberInterface
      */
     public function redirectToHome(GetResponseForExceptionEvent $event)
     {
-        $response = new RedirectResponse('/home');
+        $response = new RedirectResponse('/louvre_project/web/app_dev.php/home');
         $event->setResponse($response);
     }
 }
