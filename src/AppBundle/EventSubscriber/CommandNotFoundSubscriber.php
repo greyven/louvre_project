@@ -26,7 +26,17 @@ class CommandNotFoundSubscriber implements EventSubscriberInterface
      */
     public function redirectToHome(GetResponseForExceptionEvent $event)
     {
-        $response = new RedirectResponse('/louvre_project/web/app_dev.php/home');
-        $event->setResponse($response);
+        $e = $event->getException();
+
+        if($e instanceof CommandNotFoundException)
+        {
+//            $this->addFlash('error', 'Commande introuvable.');
+            $response = new RedirectResponse('/louvre_project/web/app_dev.php/home');
+            $event->setResponse($response);
+        }
+        else
+        {
+            return;
+        }
     }
 }
