@@ -40,23 +40,23 @@ class LouvreControllerTest extends WebTestCase
        // echo $client->getResponse()->getContent();
     }
 
-    public function testCommand()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/home');
-
-        $link = $crawler->selectLink('Billetterie')->link();
-        $crawler = $client->click($link);
-
-        $form = $crawler->selectButton('Valider')->form();
-        $form['Commande_:[fullDay]'] = 0;
-        $form['Commande_:[visitDate][day]'] = 13;
-        $form['Commande_:[visitDate][month]'] = 8;
-        $form['Commande_:[visitDate][year]'] = 2018;
-        $form['Commande_:[numberOfTickets]'] = 1;
-        $form['Commande_:[visitorEmail]'] = 'greyven@gmail.com';
-
-        $client->submit($form);
+//    public function testCommand()
+//    {
+//        $client = static::createClient();
+//        $crawler = $client->request('GET', '/home');
+//
+//        $link = $crawler->selectLink('Billetterie')->link();
+//        $crawler = $client->click($link);
+//
+//        $form = $crawler->selectButton('Valider')->form();
+//        $form['Commande_:[fullDay]'] = 0;
+//        $form['Commande_:[visitDate][day]'] = 13;
+//        $form['Commande_:[visitDate][month]'] = 8;
+//        $form['Commande_:[visitDate][year]'] = 2018;
+//        $form['Commande_:[numberOfTickets]'] = 1;
+//        $form['Commande_:[visitorEmail]'] = 'greyven@gmail.com';
+//
+//        $client->submit($form);
 //        $client->followRedirect();
-    }
+//    }
 }
