@@ -101,6 +101,16 @@ class Command
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tickets = new ArrayCollection();
+    }
+
+
+
+    /**
      * Get id.
      *
      * @return int
@@ -108,6 +118,13 @@ class Command
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -228,50 +245,6 @@ class Command
     {
         return $this->visitorEmail;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->tickets = new ArrayCollection();
-    }
-
-    /**
-     * Add ticket.
-     *
-     * @param \AppBundle\Entity\Ticket $ticket
-     *
-     * @return Command
-     */
-    public function addTicket(Ticket $ticket)
-    {
-        $this->tickets[] = $ticket;
-        $ticket->setCommand($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove ticket.
-     *
-     * @param \AppBundle\Entity\Ticket $ticket
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeTicket(Ticket $ticket)
-    {
-        return $this->tickets->removeElement($ticket);
-    }
-
-    /**
-     * Get tickets.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTickets()
-    {
-        return $this->tickets;
-    }
 
     /**
      * Set numberOfTickets.
@@ -319,5 +292,42 @@ class Command
     public function getChargeId()
     {
         return $this->chargeId;
+    }
+
+    /**
+     * Add ticket.
+     *
+     * @param \AppBundle\Entity\Ticket $ticket
+     *
+     * @return Command
+     */
+    public function addTicket(Ticket $ticket)
+    {
+        $this->tickets[] = $ticket;
+        $ticket->setCommand($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove ticket.
+     *
+     * @param \AppBundle\Entity\Ticket $ticket
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeTicket(Ticket $ticket)
+    {
+        return $this->tickets->removeElement($ticket);
+    }
+
+    /**
+     * Get tickets.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTickets()
+    {
+        return $this->tickets;
     }
 }

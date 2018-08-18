@@ -144,8 +144,10 @@ class Ticket
         {
             return ($today[2] - $bDate[2]);
         }
-
-        return ($today[2] - $bDate[2] - 1);
+        else
+        {
+            return ($today[2] - $bDate[2] - 1);
+        }
     }
 
     /**
@@ -158,10 +160,17 @@ class Ticket
         return $this->id;
     }
 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     /**
      * Set priceType.
      *
-     * @param string $priceType
+     * @param \int $priceType
      *
      * @return Ticket
      */
