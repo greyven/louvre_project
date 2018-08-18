@@ -42,7 +42,7 @@ services:
         arguments:
             - "@Swift_Mailer"
             - "@Twig_Environment"
-            - %mail_sender%
+            - "%mail_sender%"
 
     AppBundle\EventSubscriber\CommandNotFoundSubscriber:
         tags:
