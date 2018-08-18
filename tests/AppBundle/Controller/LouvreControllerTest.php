@@ -57,6 +57,6 @@ class LouvreControllerTest extends WebTestCase
         $form['Commande_:[visitorEmail]'] = 'greyven@gmail.com';
 
         $client->submit($form);
-        $client->followRedirect();
+//        $client->followRedirect();
     }
 }
