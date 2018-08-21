@@ -13,6 +13,17 @@
             </div>
         </div>
     </div>
-    <br/>
+
+    {% for message in app.session.flashbag.get('error') %}
+        {% if message is defined %}
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="well">
+                        <p class="text-center">{{ message }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
 
 {% endblock %}
