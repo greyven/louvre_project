@@ -8,10 +8,13 @@ use AppBundle\Service\Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Form\CommandType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CommandController extends Controller
 {
     /**
+     * @Route("/command", name="command")
+     *
      * @param Request $request
      * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\Response
@@ -27,13 +30,15 @@ class CommandController extends Controller
         {
             $commandManager->generateTickets($command);
 
-            return $this->redirectToRoute('app_tickets');
+            return $this->redirectToRoute('tickets');
         }
 
         return $this->render('command.html.twig', array('commandForm' => $commandForm->createView()));
     }
 
     /**
+     * @Route("/tickets", name="tickets")
+     *
      * @param Request $request
      * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\Response
@@ -49,7 +54,7 @@ class CommandController extends Controller
         if ($ticketsCollection->isSubmitted() && $ticketsCollection->isValid())
         {
             $commandManager->completeCommand();
-            return $this->redirectToRoute('app_command_payment');
+            return $this->redirectToRoute('payment');
         }
 
         return $this->render('tickets.html.twig',
@@ -58,6 +63,8 @@ class CommandController extends Controller
     }
 
     /**
+     * @Route("/command/payment", name="payment")
+     *
      * @param Request $request
      * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
@@ -73,12 +80,12 @@ class CommandController extends Controller
             {
                 $commandManager->payAndSaveCommand($command);
                 $this->addFlash("success", "Paiement éffectué !");
-                return $this->redirectToRoute("app_command_confirm");
+                return $this->redirectToRoute("confirm");
             }
             catch (\Stripe\Error\Card $e)
             {
                 $this->addFlash("error", "Erreur, paiement non éffectué !");
-                return $this->redirectToRoute("app_command_payment");
+                return $this->redirectToRoute("payment");
                 // The card has been declined
             }
         }
@@ -88,6 +95,8 @@ class CommandController extends Controller
     }
 
     /**
+     * @Route("/command/confirm", name="confirm", methods={"GET"})
+     *
      * @param Request $request
      * @param CommandManager $commandManager
      * @param Mailer $mailer
@@ -103,7 +112,7 @@ class CommandController extends Controller
         $request->getSession()->remove('command');
 
         /** @var int $mailResult (int The number of successful recipients. Can be 0 which indicates failure) */
-        $mailResult = $mailer->sendMail($command);
+        $mailResult = $mailer->sendToVisitor($command);
 
         return $this->render('confirm.html.twig', ['command' => $command, 'mailResult' => $mailResult]);
     }
