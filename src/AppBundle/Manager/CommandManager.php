@@ -66,20 +66,6 @@ class CommandManager
     }
 
     /**
-     * @return string
-     * @throws CommandNotFoundException
-     */
-    public function getCommandRecap()
-    {
-        $command = $this->getCurrentCommand();
-        $grammar = $command->getNumberOfTickets() > 1 ? ' billets' : ' billet';
-        $halfDay = $command->getFullDay() ? ' demi-journée' : ' journée';
-        $recap = 'Vous souhaitez réserver ' . $command->getNumberOfTickets() . $grammar . $halfDay .
-            ' pour le ' . $command->getVisitDate()->format('d-m-Y') . '.';
-        return $recap;
-    }
-
-    /**
      * @return int
      * @throws CommandNotFoundException
      */
