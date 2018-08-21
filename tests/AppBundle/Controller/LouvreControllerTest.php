@@ -6,25 +6,27 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class LouvreControllerTest extends WebTestCase
 {
-    /**
-     *
-     */
+    private $client;
+
+    public function setUp()
+    {
+        $this->client = static::createClient();
+    }
+
     public function testHomeIsUp()
     {
-        $client = static::createClient();
-        $client->request('GET', '/home');
+        $this->client->request('GET', '/');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
 //        echo $client->getResponse()->getContent();
     }
 
     public function testCommandIsUp()
     {
-        $client = static::createClient();
-        $client->request('GET', '/command');
+        $this->client->request('GET', '/command');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
 //        echo $client->getResponse()->getContent();
     }
@@ -32,10 +34,9 @@ class LouvreControllerTest extends WebTestCase
 
     public function testContactIsUp()
     {
-        $client = static::createClient();
-        $client->request('GET', '/contact');
+        $this->client->request('GET', '/contact');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
        // echo $client->getResponse()->getContent();
     }
