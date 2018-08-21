@@ -45,5 +45,8 @@ services:
             - "%mail_sender%"
 
     AppBundle\EventSubscriber\CommandNotFoundSubscriber:
+        arguments:
+            - "@Router"
+            - "@Session"
         tags:
             - { name: kernel.event_subscriber }
