@@ -3,15 +3,16 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends Controller
 {
     /**
-     * @param Request $request
+     * @Route("/", name="homepage", methods={"GET"})
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function homeAction(Request $request)
+    public function homeAction()
     {
         return $this->render('home.html.twig');
     }

@@ -2,37 +2,32 @@ app:
     resource: '@AppBundle/Controller/'
     type: annotation
 
-app_command:
-    path:      /command
-    defaults:
-        _controller: AppBundle:Command:command
+#app_command:
+#    path:      /command
+#    defaults:
+#        _controller: AppBundle:Command:command
 
-app_tickets:
-    path:      /tickets
-    defaults:
-        _controller: AppBundle:Command:tickets
+#app_tickets:
+#    path:      /tickets
+#    defaults:
+#        _controller: AppBundle:Command:tickets
 
-app_command_payment:
-    path:      /command/payment
-    defaults:
-        _controller: AppBundle:Command:payment
+#app_command_payment:
+#    path:      /command/payment
+#    defaults:
+#        _controller: AppBundle:Command:payment
 
-app_command_confirm:
-    path:      /command/confirm
-    defaults:
-        _controller: AppBundle:Command:confirm
+#app_command_confirm:
+#    path:      /command/confirm
+#    defaults:
+#        _controller: AppBundle:Command:confirm
 
-app_home:
-    path:       /home
-    defaults:
-        _controller: AppBundle:Home:home
+#app_home:
+#    path:       /
+#    defaults:
+#        _controller: AppBundle:Home:home
 
-app_contact:
-    path:       /contact
-    defaults:
-        _controller: AppBundle:Contact:contact
-
-app_mailed:
-    path:       /contact/mailed
-    defaults:
-        _controller: AppBundle:Contact:mailed
+#app_contact:
+#    path:       /contact
+#    defaults:
+#        _controller: AppBundle:Contact:contact
