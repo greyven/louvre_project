@@ -52,9 +52,9 @@ class TicketTest extends TestCase
     public function testSetGetBirthDate()
     {
         $ticket = new Ticket();
-        $ticket->setBirthDate(date('d/m/Y'));
+        $ticket->setBirthDate(date('Y-m-d'));
         $birthDate = $ticket->getBirthDate();
-        $this->assertSame(date('d/m/Y'), $birthDate);
+        $this->assertSame(date('Y-m-d'), $birthDate);
     }
 
     public function testSetGetReducedPrice()
