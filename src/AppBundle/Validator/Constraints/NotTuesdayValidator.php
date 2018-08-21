@@ -10,9 +10,7 @@ class NotTuesdayValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
-        $dayOfWeek = date("l");
-
-        if($dayOfWeek == "Tuesday")
+        if($value->format("l") == "Tuesday")
         {
             $this->context->addViolation($constraint->message);
         }
