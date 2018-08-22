@@ -44,12 +44,4 @@ class CommandType extends AbstractType
     {
         $resolver->setDefaults(array('data_class' => Command::class));
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'Commande_:';
-    }
 }
