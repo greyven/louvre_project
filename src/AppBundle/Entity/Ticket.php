@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Ticket
@@ -52,12 +53,18 @@ class Ticket
     /**
      * @var string
      *
+     * @Assert\Type("string")
+     * @Assert\Length(min="1", minMessage="Votre nom doit contenir au moins 1 lettre.")
+     *
      * @ORM\Column(name="lastName", type="string", length=255)
      */
     private $lastName;
 
     /**
      * @var string
+     *
+     * @Assert\Type("string")
+     * @Assert\Length(min="1", minMessage="Votre prénom doit contenir au moins 1 lettre.")
      *
      * @ORM\Column(name="firstName", type="string", length=255)
      */
@@ -72,6 +79,9 @@ class Ticket
 
     /**
      * @var \DateTime
+     *
+     * @Assert\Date()
+     * @Assert\LessThan("today", message="Vous ne pouvez pas sélectionner une date future.")
      *
      * @ORM\Column(name="birthDate", type="datetime")
      */
