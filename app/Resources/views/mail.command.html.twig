@@ -78,12 +78,11 @@
             </tr>
             <tr>
                 <td class="base intro" width="100%" valign="top" align="left">
-                    <span>Récapitulatif de votre commande {{ command.chargeId }} :</span>
+                    <span>Commande <strong>{{ command.chargeId }}</strong> :</span>
                 </td>
             </tr>
             <tr>
                 <td class="base noms" width="100%" valign="top" align="left">
-                    <p> billets journée aux noms suivants :</p>
                     <p>
                         <strong>Récapitulatif :</strong> Vous avez commandé <strong>{{ command.numberOfTickets }}</strong>
                         {% if command.numberOfTickets > 1 %}
