@@ -78,7 +78,7 @@ class Command
     /**
      * @var string
      *
-     * @Assert\Email()
+     * @Assert\Email(message="Vous devez entrer un Email valide.")
      *
      * @ORM\Column(name="visitorEmail", type="string", length=255)
      */
