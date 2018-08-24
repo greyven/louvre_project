@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ScenarioClientTest extends WebTestCase
 {
-    public function testCommand()
+    public function testCommandAndBuy()
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/');
@@ -17,21 +17,40 @@ class ScenarioClientTest extends WebTestCase
         $link = $crawler->selectLink('Billetterie')->link();
         $crawler = $client->click($link);
 
-        $form = $crawler->selectButton('Valider')->form();
-        $form['command[fullDay]'] = 0;
-        $form['command[visitDate][day]'] = 13;
-        $form['command[visitDate][month]'] = 8;
-        $form['command[visitDate][year]'] = 2018;
-        $form['command[numberOfTickets]'] = 1;
-        $form['command[visitorEmail]'] = 'greyven@gmail.com';
+//        COMMAND
+        $formCommand = $crawler->selectButton('Valider')->form();
+        $formCommand['command[fullDay]'] = 1;
+        $formCommand['command[visitDate][day]'] = 13;
+        $formCommand['command[visitDate][month]'] = 12;
+        $formCommand['command[visitDate][year]'] = 2018;
+        $formCommand['command[numberOfTickets]'] = 1;
+        $formCommand['command[visitorEmail]'] = 'greyven@gmail.com';
 
-        $client->submit($form);
+        $client->submit($formCommand);
         $this->assertTrue($client->getResponse()->isRedirection());
-        $client->followRedirect();
+        $crawler = $client->followRedirect();
 
-        $this->assertContains('Vous souhaitez réserver 1 billet demi-journée pour le 13/8/2018',
-                              $client->getResponse()->getContent())
-        ;
+        $this->assertContains('billet', $client->getResponse()->getContent());
+        $this->assertContains('journée', $client->getResponse()->getContent());
+        $this->assertContains('13/12/2018', $client->getResponse()->getContent());
+
+//        TICKETS
+        $formTicketsCollection = $crawler->selectButton('Valider')->form();
+        $formTicketsCollection['ticket_form_collection[tickets][0][lastName]'] = 'Séré';
+        $formTicketsCollection['ticket_form_collection[tickets][0][firstName]'] = 'Stef';
+        $formTicketsCollection['ticket_form_collection[tickets][0][birthDate][day]'] = 4;
+        $formTicketsCollection['ticket_form_collection[tickets][0][birthDate][month]'] = 11;
+        $formTicketsCollection['ticket_form_collection[tickets][0][birthDate][year]'] = 1983;
+        $formTicketsCollection['ticket_form_collection[tickets][0][country]'] = 'FR';
+        //$formTicketsCollection['ticket_form_collection[tickets][0][reducedPrice]']->tick();
+
+        $client->submit($formTicketsCollection);
+        $this->assertTrue($client->getResponse()->isRedirection());
+        $crawler = $client->followRedirect();
+
+        $this->assertContains('16€', $client->getResponse()->getContent());
+
+        //$modal = $crawler->filter('Payer la commande')->form();
 
     }
 }
