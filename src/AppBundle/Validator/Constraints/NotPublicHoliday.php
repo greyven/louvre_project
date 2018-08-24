@@ -11,9 +11,4 @@ use Symfony\Component\Validator\Constraint;
 class NotPublicHoliday extends Constraint
 {
     public $message = "Aucune réservation possible les jours feriés.";
-
-    public function targets()
-    {
-        return self::PROPERTY_CONSTRAINT;
-    }
 }
