@@ -18,9 +18,9 @@ class PassedTwoPmValidator extends ConstraintValidator
     public function validate($command, Constraint $constraint)
     {
         $hour = date('H', time());
-        $today = date('d/m/Y');
+        $today = date('Y-m-d');
 
-        if(($hour >= self::HALF_DAY) && ($command->getVisitDate() == $today) && $command->getFullDay())
+        if(($hour >= self::HALF_DAY) && ($command->getVisitDate()->format('Y-m-d') == $today) && $command->getFullDay())
         {
             $this->context->addViolation($constraint->message);
             return false;
