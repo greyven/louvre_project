@@ -46,7 +46,7 @@ services:
 
     AppBundle\EventSubscriber\CommandNotFoundSubscriber:
         arguments:
-            - "@Router"
-            - "@Session"
+            - "@router"
+            - "@session"
         tags:
             - { name: kernel.event_subscriber }
