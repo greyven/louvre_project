@@ -19,6 +19,8 @@ class ContactController extends Controller
      */
     public function contactAction(Request $request, Mailer $mailer)
     {
+        $request->getSession()->remove('command');
+        
         $contactForm = $this->createForm(ContactType::class);
 
         $contactForm->handleRequest($request);
