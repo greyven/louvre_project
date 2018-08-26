@@ -14,11 +14,14 @@
                 {% for message in app.session.flashbag.get('success') %}
                     <p>{{ message }}</p>
                 {% endfor %}
+
                 <p>
                     Vous avez acheté <strong>{{ command.numberOfTickets }}</strong> billet(s) au prix de
                     <strong>{{ command.totalPrice }}€</strong>.
                     <br/>
-                    Votre identifiant de commande est : <strong>{{ command.chargeId }}</strong>
+                    <span class="breakWord">
+                        Votre identifiant de commande est : <strong>{{ command.chargeId }}</strong>
+                    </span>
                     <br/>
                     {% if mailResult > 0 %}
                         Un email contenant les informations de votre commande a été envoyé à l'adresse
@@ -31,6 +34,5 @@
                 </p>
             </div>
         </div>
-    </div>
     </div>
 {% endblock %}

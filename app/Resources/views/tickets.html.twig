@@ -5,15 +5,22 @@
 
     <br/>
     <br/>
-    <h1 class="text-center">Complétion des tickets</h1>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
+            <div class="customWell">
+                <h1 class="text-center">Complétion des tickets</h1>
+            </div>
+        </div>
+    </div>
     <br/>
 
     <div class="row">
-        <div class="col-md-offset-2 col-md-8">
+        <div class="col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10  col-xs-12">
             <div class="well">
 
                 <p>
-                    <strong>Récapitulatif :</strong> Vous souhaitez réserver <strong>{{ command.numberOfTickets }}</strong>
+                    <strong>Récapitulatif :</strong> Vous souhaitez réserver
+                    <strong>{{ command.numberOfTickets }}</strong>
                     {% if command.numberOfTickets > 1 %}
                         billets
                     {% else %}
@@ -24,40 +31,38 @@
                     {% else %}
                         <strong>demi-journée</strong>
                     {% endif %}
-                    pour le <strong>{{  command.visitDate|date("d/m/Y") }}</strong>.
+                    pour le <strong>{{ command.visitDate|date("d/m/Y") }}</strong>.
                 </p>
 
                 {{ form_start(ticketsCollection) }}
-
                 {% for ticket in ticketsCollection.tickets %}
                     <div class="row">
-                        <div class="col-md-12">
-                            <hr class="style12">
+
+                        <div class="col-xs-12">
+                            <hr class="style12"> {#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#}
                         </div>
-                        <div class="col-md-12">
+
+                        <div class="col-xs-12">
                             <h4><strong>Billet n°{{ ticket.vars.name }}</strong></h4>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-xs-12">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-sm-6">
                                     {{ form_row(ticket.lastName) }}
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-sm-6">
                                     {{ form_row(ticket.firstName) }}
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="alignItems">
-                                    <div class="col-md-5">
-                                        {{ form_row(ticket.birthDate) }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        {{ form_row(ticket.country) }}
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        {{ form_row(ticket.reducedPrice) }}
-                                    </div>
+                                <div class="col-xs-12 col-sm-6 col-lg-5">
+                                    {{ form_row(ticket.birthDate) }}
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-lg-4">
+                                    {{ form_row(ticket.country) }}
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-lg-3">
+                                    {{ form_row(ticket.reducedPrice) }}
                                 </div>
                             </div>
                         </div>
@@ -68,18 +73,18 @@
                         </div>
                     </div>
                 {% endfor %}
-                <hr class="style12">
+
+                <hr class="style12"> {#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#}
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="horizAlignCenter">
-                            <input type="submit" value="Valider" class="btn btn-default" />
+                            <input type="submit" value="Valider" class="btn btn-default"/>
                         </div>
                     </div>
                 </div>
                 {{ form_end(ticketsCollection) }}
-
             </div>
         </div>
     </div>
-
 {% endblock %}
