@@ -10,7 +10,7 @@
 /***********/
 /* GÉNÉRAL */
 /***********/
-body { background: url("../images/bg.jpg") no-repeat fixed center center; }
+body { background: url("../images/bg.jpg") no-repeat fixed 50.4% 50%; }
 .marginTop { margin-top: 40px; }
 .customWell
 {
