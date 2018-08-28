@@ -44,7 +44,7 @@ class CommandType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => Command::class,
-            'validation_groups' => ['step1','step2', 'step3']
+            'validation_groups' => ['step1']
         ));
     }
 }

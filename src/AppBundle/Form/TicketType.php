@@ -42,7 +42,7 @@ class TicketType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => Ticket::class,
-            'validation_groups' => ['step2', 'step3']
+            'validation_groups' => ['step2']
         ));
     }
 }
