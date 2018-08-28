@@ -92,7 +92,7 @@ class TicketTest extends TestCase
 
         $ticket->setBirthDate(new \DateTime('2017-01-01')); //bébé
         $result = $ticket->defineAndSetTicketPrice();
-        $this->assertSame(0, $result);
+        $this->assertSame(0.0, $result);
     }
 
     public function testDefineAndSetTicketPriceFullDayChild()
@@ -104,7 +104,7 @@ class TicketTest extends TestCase
 
         $ticket->setBirthDate(new \DateTime('2010-01-01')); //enfant
         $result = $ticket->defineAndSetTicketPrice();
-        $this->assertSame(8, $result);
+        $this->assertSame(8.0, $result);
     }
 
     public function testDefineAndSetTicketPriceFullDayReducedPrice()
@@ -117,7 +117,7 @@ class TicketTest extends TestCase
         $ticket->setBirthDate(new \DateTime('2000-01-01')); //tarif réduit
         $ticket->setReducedPrice(true);
         $result = $ticket->defineAndSetTicketPrice();
-        $this->assertSame(10, $result);
+        $this->assertSame(10.0, $result);
     }
 
     public function testDefineAndSetTicketPriceFullDaySenior()
@@ -129,7 +129,7 @@ class TicketTest extends TestCase
 
         $ticket->setBirthDate(new \DateTime('1950-01-01')); //senior
         $result = $ticket->defineAndSetTicketPrice();
-        $this->assertSame(12, $result);
+        $this->assertSame(12.0, $result);
     }
 
     public function testDefineAndSetTicketPriceFullDayNormal()
@@ -141,7 +141,7 @@ class TicketTest extends TestCase
 
         $ticket->setBirthDate(new \DateTime('1980-01-01')); //normal
         $result = $ticket->defineAndSetTicketPrice();
-        $this->assertSame(16, $result);
+        $this->assertSame(16.0, $result);
     }
 
     public function testDefineAndSetTicketPriceHalfDayBaby()
@@ -153,7 +153,7 @@ class TicketTest extends TestCase
 
         $ticket->setBirthDate(new \DateTime('2017-01-01')); //bébé
         $result = $ticket->defineAndSetTicketPrice();
-        $this->assertSame(0, $result);
+        $this->assertSame(0.0, $result);
     }
 
     public function testDefineAndSetTicketPriceHalfDayChild()
