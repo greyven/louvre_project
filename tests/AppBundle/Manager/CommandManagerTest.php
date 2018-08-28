@@ -21,8 +21,9 @@ class CommandManagerTest extends TestCase
         $em = $this->createMock('Doctrine\ORM\EntityManager');
         $pay = $this->createMock('AppBundle\Service\Pay');
         $swift_mailer = $this->createMock('\Swift_Mailer');
+        $validatoInterface = $this->createMock('Symfony\Component\Validator\Validator\ValidatorInterface');
 
-        $cm = new CommandManager($session, $em, $pay, $swift_mailer);
+        $cm = new CommandManager($session, $em, $pay, $swift_mailer, $validatoInterface);
 
         $commandId = $cm->getCurrentCommand()->getId();
         $this->assertSame(15, $commandId);
@@ -34,8 +35,9 @@ class CommandManagerTest extends TestCase
         $em = $this->createMock('Doctrine\ORM\EntityManager');
         $pay = $this->createMock('AppBundle\Service\Pay');
         $swift_mailer = $this->createMock('\Swift_Mailer');
+        $validatoInterface = $this->createMock('Symfony\Component\Validator\Validator\ValidatorInterface');
 
-        $cm = new CommandManager($session, $em, $pay, $swift_mailer);
+        $cm = new CommandManager($session, $em, $pay, $swift_mailer, $validatoInterface);
 
         $this->expectException('AppBundle\Exception\CommandNotFoundException');
         $cm->getCurrentCommand();
@@ -53,13 +55,14 @@ class CommandManagerTest extends TestCase
         $em = $this->createMock('Doctrine\ORM\EntityManager');
         $pay = $this->createMock('AppBundle\Service\Pay');
         $swift_mailer = $this->createMock('\Swift_Mailer');
+        $validatoInterface = $this->createMock('Symfony\Component\Validator\Validator\ValidatorInterface');
 
-        $cm = new CommandManager($session, $em, $pay, $swift_mailer);
+        $cm = new CommandManager($session, $em, $pay, $swift_mailer, $validatoInterface);
 
-        $totalPrice = $cm->getTotalPrice();
+        $totalPrice = $cm->getTotalPrice($command);
         $this->assertSame(4.0, $totalPrice);
 
-        $cm->completeCommand();
+        $cm->completeCommand($command);
     }
 
     public function testGenerateTickets()
@@ -71,8 +74,9 @@ class CommandManagerTest extends TestCase
         $em = $this->createMock('Doctrine\ORM\EntityManager');
         $pay = $this->createMock('AppBundle\Service\Pay');
         $swift_mailer = $this->createMock('\Swift_Mailer');
+        $validatoInterface = $this->createMock('Symfony\Component\Validator\Validator\ValidatorInterface');
 
-        $cm = new CommandManager($session, $em, $pay, $swift_mailer);
+        $cm = new CommandManager($session, $em, $pay, $swift_mailer, $validatoInterface);
 
         $cm->generateTickets($command);
 
@@ -93,8 +97,9 @@ class CommandManagerTest extends TestCase
         $em = $this->createMock('Doctrine\ORM\EntityManager');
         $pay = $this->createMock('AppBundle\Service\Pay');
         $swift_mailer = $this->createMock('\Swift_Mailer');
+        $validatoInterface = $this->createMock('Symfony\Component\Validator\Validator\ValidatorInterface');
 
-        $cm = new CommandManager($session, $em, $pay, $swift_mailer);
+        $cm = new CommandManager($session, $em, $pay, $swift_mailer, $validatoInterface);
 
         $cm->persistAndFlushCommand($command);
 
@@ -110,8 +115,9 @@ class CommandManagerTest extends TestCase
         $em = $this->createMock('Doctrine\ORM\EntityManager');
         $pay = $this->createMock('AppBundle\Service\Pay');
         $swift_mailer = $this->createMock('\Swift_Mailer');
+        $validatoInterface = $this->createMock('Symfony\Component\Validator\Validator\ValidatorInterface');
 
-        $cm = new CommandManager($session, $em, $pay, $swift_mailer);
+        $cm = new CommandManager($session, $em, $pay, $swift_mailer, $validatoInterface);
 
         $result = $cm->payAndSaveCommand($command);
         $this->assertSame(true, $result);
