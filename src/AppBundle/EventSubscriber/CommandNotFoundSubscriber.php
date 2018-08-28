@@ -48,7 +48,7 @@ class CommandNotFoundSubscriber implements EventSubscriberInterface
 
         if($e instanceof CommandNotFoundException)
         {
-            $this->session->getFlashBag()->add('error', 'Commande introuvable.');
+            $this->session->getFlashBag()->add('error', $e->getMessage());
             $response = new RedirectResponse($this->router->generate('homepage'));
             $event->setResponse($response);
         }
