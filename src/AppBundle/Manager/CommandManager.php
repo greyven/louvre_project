@@ -10,6 +10,8 @@ use AppBundle\Service\Pay;
 use Swift_Mailer;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CommandManager
 {
@@ -29,13 +31,19 @@ class CommandManager
      * @var Swift_Mailer
      */
     private $swift_Mailer;
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
 
-    public function __construct(SessionInterface $session, EntityManagerInterface $em, Pay $pay, Swift_Mailer $swift_Mailer)
+    public function __construct(SessionInterface $session, EntityManagerInterface $em, Pay $pay,
+                                Swift_Mailer $swift_Mailer, ValidatorInterface $validator)
     {
         $this->session = $session;
         $this->em = $em;
         $this->pay = $pay;
         $this->swift_Mailer = $swift_Mailer;
+        $this->validator = $validator;
     }
 
     /**
@@ -49,33 +57,55 @@ class CommandManager
     }
 
     /**
+     * @param null $validator_group
      * @return Command
      * @throws CommandNotFoundException
      */
-    public function getCurrentCommand()
+    public function getCurrentCommand($validator_group = null)
     {
         $command = $this->session->get('command');
         if($command instanceof Command)
         {
+            switch ($validator_group)
+            {
+                case 'step1':
+                    $errors = $this->validator->validate($command, null, ['step1']);
+                    break;
+                case 'step2':
+                    $errors = $this->validator->validate($command, null, ['step2']);
+                    break;
+                case 'step3':
+                    $errors = $this->validator->validate($command, null, ['step3']);
+                    break;
+                default :
+                    $errors = [];
+            }
+
+            if(count($errors) > 0)
+            {
+                //return $errors;
+                throw new CommandNotFoundException("Commande invalide.");
+            }
+
             return $command;
         }
         else
         {
-            throw new CommandNotFoundException("La commande n'existe pas.");
+            throw new CommandNotFoundException("Pas de commande en mémoire.");
         }
     }
 
     /**
+     * @param Command $command
      * @return int
-     * @throws CommandNotFoundException
      */
-    public function getTotalPrice()
+    public function getTotalPrice(Command $command)
     {
-        $command = $this->getCurrentCommand();
         $totalPrice = 0;
 
         /** @var Ticket $ticket */
-        foreach ($command->getTickets() as $ticket) {
+        foreach ($command->getTickets() as $ticket)
+        {
             $ticketPrice = $ticket->defineAndSetTicketPrice();
             $totalPrice = $totalPrice + $ticketPrice;
         }
@@ -83,12 +113,11 @@ class CommandManager
     }
 
     /**
-     * @throws CommandNotFoundException
+     * @param Command $command
      */
-    public function completeCommand()
+    public function completeCommand(Command $command)
     {
-        $command = $this->getCurrentCommand();
-        $command->setTotalPrice($this->getTotalPrice());
+        $command->setTotalPrice($this->getTotalPrice($command));
         $command->setReservationDate(new \DateTime());
     }
 

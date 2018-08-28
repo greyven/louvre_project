@@ -33,13 +33,17 @@ class Command
     /**
      * @var int
      *
-     * @Assert\Type(type="int")
+     * @Assert\Type(type="int", groups={"step1", "step2", "step3"})
+     * @Assert\NotNull(groups={"step1", "step2", "step3"})
      * @Assert\Range(min=1, minMessage="Vous devez prendre au moins 1 billet.", max=10, maxMessage="Le maximum d'achat est de 10 billets")
      */
     private $numberOfTickets = 1;
 
     /**
      * @var bool
+     *
+     * @Assert\Type(type="bool", groups={"step1", "step2", "step3"})
+     * @Assert\NotNull(groups={"step1", "step2", "step3"})
      *
      * @ORM\Column(name="fullDay", type="boolean")
      */
@@ -48,7 +52,8 @@ class Command
     /**
      * @var \DateTime
      *
-     * @Assert\Date()
+     * @Assert\Date(groups={"step1", "step2", "step3"})
+     * @Assert\NotNull(groups={"step1", "step2", "step3"})
      * @Assert\GreaterThanOrEqual("today", message="Vous ne pouvez pas réserver pour une date passée.")
      *
      * @ORM\Column(name="visitDate", type="datetime")
@@ -62,14 +67,19 @@ class Command
     /**
      * @var float
      *
+     * @Assert\Type(type="float", groups={"step2", "step3"})
+     * @Assert\NotNull(groups={"step2", "step3"})
+     *
      * @ORM\Column(name="totalPrice", type="float")
+     *
      */
     private $totalPrice;
 
     /**
      * @var \DateTime
      *
-     * @Assert\Date()
+     * @Assert\Date(groups={"step2", "step3"})
+     * @Assert\NotNull(groups={"step2", "step3"})
      *
      * @ORM\Column(name="reservationDate", type="datetime")
      */
@@ -78,7 +88,8 @@ class Command
     /**
      * @var string
      *
-     * @Assert\Email(message="Vous devez entrer un Email valide.")
+     * @Assert\Email(message="Vous devez entrer un Email valide.", groups={"step1", "step2", "step3"})
+     * @Assert\NotNull(groups={"step1", "step2", "step3"})
      *
      * @ORM\Column(name="visitorEmail", type="string", length=255)
      */
@@ -88,11 +99,15 @@ class Command
      * @var Ticket[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ticket", mappedBy="command", cascade={"persist","remove"})
+     * @Assert\Valid()
      */
     private $tickets;
 
     /**
      * @var string
+     *
+     * @Assert\Type(type="string", groups={"step3"})
+     * @Assert\NotNull(groups={"step3"})
      *
      * @ORM\Column(name="chargeId", type="string", length=255)
      */

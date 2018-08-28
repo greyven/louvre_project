@@ -46,28 +46,21 @@ class CommandController extends Controller
      */
     public function ticketsAction(Request $request, CommandManager $commandManager)
     {
-        $command = $commandManager->getCurrentCommand();
+        $command = $commandManager->getCurrentCommand('step1');
+        dump($command);
 
-        if ($command->getVisitorEmail() !== null)
+        $ticketsCollection = $this->createForm(TicketFormCollectionType::class, $command);
+
+        $ticketsCollection->handleRequest($request);
+
+        if ($ticketsCollection->isSubmitted() && $ticketsCollection->isValid())
         {
-            $ticketsCollection = $this->createForm(TicketFormCollectionType::class, $command);
-
-            $ticketsCollection->handleRequest($request);
-
-            if ($ticketsCollection->isSubmitted() && $ticketsCollection->isValid())
-            {
-                $commandManager->completeCommand();
-                return $this->redirectToRoute('payment');
-            }
-
-            return $this->render('tickets.html.twig',
-                array('ticketsCollection' => $ticketsCollection->createView(), 'command' => $command))
-                ;
+            $commandManager->completeCommand($command);
+            return $this->redirectToRoute('payment');
         }
-        else
-        {
-            return $this->redirectToRoute('command');
-        }
+
+        return $this->render('tickets.html.twig',
+            array('ticketsCollection' => $ticketsCollection->createView(), 'command' => $command));
     }
 
     /**
@@ -80,33 +73,26 @@ class CommandController extends Controller
      */
     public function paymentAction(Request $request, CommandManager $commandManager)
     {
-        $command = $commandManager->getCurrentCommand();
+        $command = $commandManager->getCurrentCommand('step2');
 
-        if($command->getTotalPrice() !== null)
+        if ($request->isMethod('POST'))
         {
-            if ($request->isMethod('POST'))
+            try
             {
-                try
-                {
-                    $commandManager->payAndSaveCommand($command);
-                    $this->addFlash("success", "Paiement éffectué !");
-                    return $this->redirectToRoute("confirm");
-                }
-                catch (\Stripe\Error\Card $e)
-                {
-                    $this->addFlash("error", "Erreur, paiement non éffectué !");
-                    return $this->redirectToRoute("payment");
-                    // The card has been declined
-                }
+                $commandManager->payAndSaveCommand($command);
+                $this->addFlash("success", "Paiement éffectué !");
+                return $this->redirectToRoute("confirm");
             }
+            catch (\Stripe\Error\Card $e)
+            {
+                $this->addFlash("error", "Erreur, paiement non éffectué !");
+                return $this->redirectToRoute("payment");
+                // The card has been declined
+            }
+        }
 
-            return $this->render('payment.html.twig',
-                array('stripe_public_key' => $this->getParameter('stripe_public_key'), 'command' => $command));
-        }
-        else
-        {
-            return $this->redirectToRoute('command');
-        }
+        return $this->render('payment.html.twig',
+            array('stripe_public_key' => $this->getParameter('stripe_public_key'), 'command' => $command));
     }
 
     /**
@@ -123,19 +109,12 @@ class CommandController extends Controller
      */
     public function confirmAction(Request $request, CommandManager $commandManager, Mailer $mailer)
     {
-        $command = $commandManager->getCurrentCommand();
+        $command = $commandManager->getCurrentCommand('step3');
         $request->getSession()->remove('command');
 
-        if ($command->getChargeId() !== null)
-        {
-            /** @var int $mailResult (int The number of successful recipients. Can be 0 which indicates failure) */
-            $mailResult = $mailer->sendToVisitor($command);
+        /** @var int $mailResult (int The number of successful recipients. Can be 0 which indicates failure) */
+        $mailResult = $mailer->sendToVisitor($command);
 
-            return $this->render('confirm.html.twig', ['command' => $command, 'mailResult' => $mailResult]);
-        }
-        else
-        {
-            return $this->redirectToRoute('command');
-        }
+        return $this->render('confirm.html.twig', ['command' => $command, 'mailResult' => $mailResult]);
     }
 }

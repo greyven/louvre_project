@@ -17,11 +17,11 @@ class Ticket
     const AGE_ADULT = 12;
     const AGE_SENIOR = 60;
 
-    const PRICE_BABY = 0;
-    const PRICE_CHILD = 8;
-    const PRICE_NORMAL = 16;
-    const PRICE_SENIOR = 12;
-    const PRICE_REDUCED = 10;
+    const PRICE_BABY = 0.0;
+    const PRICE_CHILD = 8.0;
+    const PRICE_NORMAL = 16.0;
+    const PRICE_SENIOR = 12.0;
+    const PRICE_REDUCED = 10.0;
 
     const COEF_FULL = 1;
     const COEF_HALF = 0.5;
@@ -39,12 +39,18 @@ class Ticket
     /**
      * @var int
      *
+     * @Assert\Type(type="int", groups={"step2", "step3"})
+     * @Assert\NotNull(groups={"step2", "step3"})
+     *
      * @ORM\Column(name="priceType", type="integer")
      */
     private $priceType;
 
     /**
-     * @var int
+     * @var float
+     *
+     * @Assert\Type(type="float", groups={"step2", "step3"})
+     * @Assert\NotNull(groups={"step2", "step3"})
      *
      * @ORM\Column(name="ticketPrice", type="integer")
      */
@@ -53,7 +59,8 @@ class Ticket
     /**
      * @var string
      *
-     * @Assert\Type("string")
+     * @Assert\Type(type="string", groups={"step2", "step3"})
+     * @Assert\NotNull(groups={"step2", "step3"})
      * @Assert\Length(min="1", minMessage="Votre nom doit contenir au moins 1 lettre.")
      *
      * @ORM\Column(name="lastName", type="string", length=255)
@@ -63,7 +70,8 @@ class Ticket
     /**
      * @var string
      *
-     * @Assert\Type("string")
+     * @Assert\Type(type="string", groups={"step2", "step3"})
+     * @Assert\NotNull(groups={"step2", "step3"})
      * @Assert\Length(min="1", minMessage="Votre prénom doit contenir au moins 1 lettre.")
      *
      * @ORM\Column(name="firstName", type="string", length=255)
@@ -73,6 +81,9 @@ class Ticket
     /**
      * @var string
      *
+     * @Assert\Type(type="string", groups={"step2", "step3"})
+     * @Assert\NotNull(groups={"step2", "step3"})
+     *
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
@@ -80,7 +91,8 @@ class Ticket
     /**
      * @var \DateTime
      *
-     * @Assert\Date()
+     * @Assert\Date(groups={"step2", "step3"})
+     * @Assert\NotNull(groups={"step2", "step3"})
      * @Assert\LessThan("today", message="Vous ne pouvez pas sélectionner une date future.")
      *
      * @ORM\Column(name="birthDate", type="datetime")
@@ -89,6 +101,9 @@ class Ticket
 
     /**
      * @var bool
+     *
+     * @Assert\Type(type="bool", groups={"step2", "step3"})
+     * @Assert\NotNull(groups={"step2", "step3"})
      *
      * @ORM\Column(name="reducedPrice", type="boolean")
      */
