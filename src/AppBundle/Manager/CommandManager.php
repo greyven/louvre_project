@@ -83,7 +83,6 @@ class CommandManager
 
             if(count($errors) > 0)
             {
-                //return $errors;
                 throw new CommandNotFoundException("Commande invalide.");
             }
 
