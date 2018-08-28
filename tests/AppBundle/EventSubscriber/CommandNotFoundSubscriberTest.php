@@ -12,6 +12,6 @@ class CommandNotFoundSubscriberTest extends WebTestCase
         $client->request('GET', '/tickets');
         $client->followRedirect();
 
-        $this->assertContains('Commande introuvable', $client->getResponse()->getContent());
+        $this->assertContains('Pas de commande en mémoire', $client->getResponse()->getContent());
     }
 }
