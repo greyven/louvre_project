@@ -40,6 +40,9 @@ class TicketType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array('data_class' => Ticket::class));
+        $resolver->setDefaults(array(
+            'data_class' => Ticket::class,
+            'validation_groups' => ['step2', 'step3']
+        ));
     }
 }
