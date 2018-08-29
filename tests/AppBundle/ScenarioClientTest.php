@@ -24,7 +24,7 @@ class ScenarioClientTest extends WebTestCase
         $formCommand['command[visitDate][month]'] = 12;
         $formCommand['command[visitDate][year]'] = 2018;
         $formCommand['command[numberOfTickets]'] = 1;
-        $formCommand['command[visitorEmail]'] = 'greyven@gmail.com';
+        $formCommand['command[visitorEmail]'] = 'toto@mail.fr';
 
         $client->submit($formCommand);
         $this->assertTrue($client->getResponse()->isRedirection());
@@ -46,12 +46,9 @@ class ScenarioClientTest extends WebTestCase
 
         $client->submit($formTicketsCollection);
         $this->assertTrue($client->getResponse()->isRedirection());
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
 
         $this->assertContains('16€', $client->getResponse()->getContent());
-
-        //$modal = $crawler->filter('Payer la commande')->form();
-
     }
 
     public function testBadFormsEntries()
@@ -65,16 +62,33 @@ class ScenarioClientTest extends WebTestCase
         $link = $crawler->selectLink('Billetterie')->link();
         $crawler = $client->click($link);
 
-//        COMMAND
+//        COMMAND TUESDAY
         $formCommand = $crawler->selectButton('Valider')->form();
         $formCommand['command[fullDay]'] = 1;
-        $formCommand['command[visitDate][day]'] = 28;
-        $formCommand['command[visitDate][month]'] = 8;
+        $formCommand['command[visitDate][day]'] = 6;
+        $formCommand['command[visitDate][month]'] = 11;
         $formCommand['command[visitDate][year]'] = 2018;
         $formCommand['command[numberOfTickets]'] = 1;
-        $formCommand['command[visitorEmail]'] = 'greyven@gmail';
-        $client->submit($formCommand);
+        $formCommand['command[visitorEmail]'] = 'toto@mail.fr';
+        $crawler = $client->submit($formCommand);
 
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertFalse($client->getResponse()->isSuccessful());
+
+
+        $crawler = $client->request('GET', '/');
+        $link = $crawler->selectLink('Billetterie')->link();
+        $crawler = $client->click($link);
+
+//        COMMAND TUESDAY
+        $formCommand = $crawler->selectButton('Valider')->form();
+        $formCommand['command[fullDay]'] = 1;
+        $formCommand['command[visitDate][day]'] = 4;
+        $formCommand['command[visitDate][month]'] = 11;
+        $formCommand['command[visitDate][year]'] = 2018;
+        $formCommand['command[numberOfTickets]'] = 1;
+        $formCommand['command[visitorEmail]'] = 'toto@mail.fr';
+        $crawler = $client->submit($formCommand);
+
+        $this->assertFalse($client->getResponse()->isSuccessful());
     }
 }
