@@ -88,10 +88,8 @@ class CommandManager
 
             return $command;
         }
-        else
-        {
-            throw new CommandNotFoundException("Pas de commande en mémoire.");
-        }
+
+        throw new CommandNotFoundException("Pas de commande en mémoire.");
     }
 
     /**
