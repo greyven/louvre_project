@@ -52,9 +52,7 @@ class CommandNotFoundSubscriber implements EventSubscriberInterface
             $response = new RedirectResponse($this->router->generate('homepage'));
             $event->setResponse($response);
         }
-        else
-        {
-            return;
-        }
+
+        return;
     }
 }
