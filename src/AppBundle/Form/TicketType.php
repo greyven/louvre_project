@@ -30,7 +30,7 @@ class TicketType extends AbstractType
                 'label' => 'Date de naissance : ',
                 'data' => new \DateTime("01-01-1990")))
             ->add('reducedPrice', CheckboxType::class, array(
-                'label' => 'Tarif réduit ? ',
+                'label' => 'Tarif réduit ? (Présentez votre justificatif à l\'entrée)',
                 'required' => false))
         ;
     }
