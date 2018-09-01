@@ -47,7 +47,6 @@ class CommandController extends Controller
     public function ticketsAction(Request $request, CommandManager $commandManager)
     {
         $command = $commandManager->getCurrentCommand('step1');
-        dump($command);
 
         $ticketsCollection = $this->createForm(TicketFormCollectionType::class, $command);
 
