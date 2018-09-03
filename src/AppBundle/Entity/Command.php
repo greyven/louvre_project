@@ -13,8 +13,8 @@ use AppBundle\Validator\Constraints;
  * @ORM\Table(name="command")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CommandRepository")
  *
- * @Constraints\OneThousandTicketsMax(groups={"step1", "step2", "step3"})
- * @Constraints\PassedTwoPm(groups={"step1", "step2", "step3"})
+ * @Constraints\OneThousandTicketsMax()
+ * @Constraints\PassedTwoPm()
  */
 class Command
 {
@@ -54,13 +54,13 @@ class Command
      *
      * @Assert\Date(groups={"step1", "step2", "step3"})
      * @Assert\NotNull(groups={"step1", "step2", "step3"})
-     * @Assert\GreaterThanOrEqual("today", message="Vous ne pouvez pas réserver pour une date passée.", groups={"step1", "step2", "step3"})
+     * @Assert\GreaterThanOrEqual("today", message="Vous ne pouvez pas réserver pour une date passée.")
      *
      * @ORM\Column(name="visitDate", type="datetime")
      *
-     * @Constraints\NotSunday(groups={"step1", "step2", "step3"})
-     * @Constraints\NotTuesday(groups={"step1", "step2", "step3"})
-     * @Constraints\NotPublicHoliday(groups={"step1", "step2", "step3"})
+     * @Constraints\NotSunday()
+     * @Constraints\NotTuesday()
+     * @Constraints\NotPublicHoliday()
      */
     private $visitDate;
 

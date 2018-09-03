@@ -93,7 +93,7 @@ class Ticket
      *
      * @Assert\Date(groups={"step2", "step3"})
      * @Assert\NotNull(groups={"step2", "step3"})
-     * @Assert\LessThan("today", message="Vous ne pouvez pas sélectionner une date future.", groups={"step2", "step3"})
+     * @Assert\LessThan("today", message="Vous ne pouvez pas sélectionner une date future.")
      *
      * @ORM\Column(name="birthDate", type="datetime")
      */
