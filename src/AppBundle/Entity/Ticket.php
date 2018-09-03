@@ -61,7 +61,7 @@ class Ticket
      *
      * @Assert\Type(type="string", groups={"step2", "step3"})
      * @Assert\NotNull(groups={"step2", "step3"})
-     * @Assert\Length(min="1", minMessage="Votre nom doit contenir au moins 1 lettre.")
+     * @Assert\Length(min="1", minMessage="Votre nom doit contenir au moins 1 lettre.", groups={"step2", "step3"})
      *
      * @ORM\Column(name="lastName", type="string", length=255)
      */
@@ -72,7 +72,7 @@ class Ticket
      *
      * @Assert\Type(type="string", groups={"step2", "step3"})
      * @Assert\NotNull(groups={"step2", "step3"})
-     * @Assert\Length(min="1", minMessage="Votre prénom doit contenir au moins 1 lettre.")
+     * @Assert\Length(min="1", minMessage="Votre prénom doit contenir au moins 1 lettre.", groups={"step2", "step3"})
      *
      * @ORM\Column(name="firstName", type="string", length=255)
      */
@@ -93,7 +93,7 @@ class Ticket
      *
      * @Assert\Date(groups={"step2", "step3"})
      * @Assert\NotNull(groups={"step2", "step3"})
-     * @Assert\LessThan("today", message="Vous ne pouvez pas sélectionner une date future.")
+     * @Assert\LessThan("today", message="Vous ne pouvez pas sélectionner une date future.", groups={"step2", "step3"})
      *
      * @ORM\Column(name="birthDate", type="datetime")
      */
