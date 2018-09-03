@@ -11,12 +11,10 @@ class HomeController extends Controller
     /**
      * @Route("/", name="homepage", methods={"GET"})
      *
-     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function homeAction(Request $request)
+    public function homeAction()
     {
-        $request->getSession()->remove('command');
         return $this->render('home.html.twig');
     }
 }
