@@ -1,0 +1,40 @@
+{# app/Resources/views/confirm.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <br/>
+    <br/>
+    <div id="wrapper">
+        <div id="container">
+            <div id="welcome">
+                <h1>Paiement de votre commande:</h1>
+            </div>
+
+            <div>
+                {# On affiche tous les messages flash dont le nom est « info » #}
+                {% for message in app.session.flashbag.get('success') %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+
+                <p>
+                    Vous avez acheté <strong>{{ command.numberOfTickets }}</strong> billet(s) au prix de
+                    <strong>{{ command.totalPrice }}€</strong>.
+                    <br/>
+                    <span class="breakWord">
+                        Votre identifiant de commande est : <strong>{{ command.chargeId }}</strong>
+                    </span>
+                    <br/>
+                    {% if mailResult > 0 %}
+                        Un email contenant les informations de votre commande a été envoyé à l'adresse
+                        <strong>{{ command.visitorEmail }}</strong>.
+                    {% else %}
+                        Une erreur est survenue durant l'envoi de l'email vers l'adresse
+                        <strong>{{ command.visitorEmail }}</strong>. Veuillez faire une capture d'écran ou noter les
+                        informations qui sont affichée sur ce récapitulatif.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

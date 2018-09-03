@@ -15,3 +15,11 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+.idea/workspace.xml
+.idea/workspace.xml
+src/AppBundle/Entity/Command.php~
+src/AppBundle/Entity/Ticket.php~
+src/AppBundle/Entity/Command.php~
+*.php~
+*.php~
+.idea/workspace.xml___jb_tmp___

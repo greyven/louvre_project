@@ -1,0 +1,29 @@
+{# app/Resources/views/home.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <br/>
+    <br/>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <div class="customWell">
+                <h1 class="text-center">Musée du Louvre</h1>
+                <h4 class="text-center">Nous vous souhaitons la bienvenue.</h4>
+            </div>
+        </div>
+    </div>
+
+    {% for message in app.session.flashbag.get('error') %}
+        {% if message is defined %}
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="well">
+                        <p class="text-center">{{ message }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
