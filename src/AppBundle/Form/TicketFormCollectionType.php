@@ -28,6 +28,9 @@ class TicketFormCollectionType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array('data_class' => Command::class));
+        $resolver->setDefaults(array(
+            'data_class' => Command::class,
+            'validation_groups' => ['step2']
+        ));
     }
 }
