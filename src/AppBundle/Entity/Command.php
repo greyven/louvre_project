@@ -50,7 +50,7 @@ class Command
     private $fullDay;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Assert\Date(groups={"step1", "step2", "step3"})
      * @Assert\NotNull(groups={"step1", "step2", "step3"})
@@ -76,7 +76,7 @@ class Command
     private $totalPrice;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Assert\Date(groups={"step2", "step3"})
      * @Assert\NotNull(groups={"step2", "step3"})
@@ -120,6 +120,7 @@ class Command
      */
     public function __construct()
     {
+        $this->visitDate = new \DateTime();
         $this->tickets = new ArrayCollection();
     }
 
@@ -168,7 +169,7 @@ class Command
     /**
      * Set visitDate.
      *
-     * @param \DateTime $visitDate
+     * @param DateTime $visitDate
      *
      * @return Command
      */
@@ -182,7 +183,7 @@ class Command
     /**
      * Get visitDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getVisitDate()
     {
@@ -216,7 +217,7 @@ class Command
     /**
      * Set reservationDate.
      *
-     * @param \DateTime $reservationDate
+     * @param DateTime $reservationDate
      *
      * @return Command
      */
@@ -230,7 +231,7 @@ class Command
     /**
      * Get reservationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getReservationDate()
     {
