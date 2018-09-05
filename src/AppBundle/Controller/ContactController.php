@@ -11,12 +11,12 @@ class ContactController extends Controller
     /**
      * @Route("/contact", name="contact")
      *
-     * @param ContactTypeHandler $handler
+     * @param ContactTypeHandler $contactTypeHandler
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function contactAction(ContactTypeHandler $handler)
+    public function contactAction(ContactTypeHandler $contactTypeHandler)
     {
-        $result = $handler->handle();
+        $result = $contactTypeHandler->handle();
 
         if (true === $result)
         {
