@@ -2,9 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Command;
 use AppBundle\Form\Handler\CommandTypeHandler;
-use AppBundle\Form\TicketFormCollectionType;
+use AppBundle\Form\Handler\TicketFormCollectionTypeHandler;
 use AppBundle\Manager\CommandManager;
 use AppBundle\Service\Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,12 +22,10 @@ class CommandController extends Controller
     public function commandAction(CommandTypeHandler $commandTypeHandler, CommandManager $commandManager)
     {
         $command = $commandManager->initCommand();
-        $result = $commandTypeHandler->handle($command);
+        $result = $commandTypeHandler->handle($command, $commandManager);
 
-        if ($result instanceof Command)
+        if (true === $result)
         {
-            $commandManager->generateTickets($command);
-
             return $this->redirectToRoute('tickets');
         }
 
@@ -38,27 +35,24 @@ class CommandController extends Controller
     /**
      * @Route("/tickets", name="tickets")
      *
-     * @param Request $request
+     * @param TicketFormCollectionTypeHandler $tFormColTypeHandler
      * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
+     * @throws \AppBundle\Exception\CommandNotFoundException
      */
-    public function ticketsAction(Request $request, CommandManager $commandManager)
+    public function ticketsAction(TicketFormCollectionTypeHandler $tFormColTypeHandler, CommandManager $commandManager)
     {
         $command = $commandManager->getCurrentCommand('step1');
 
-        $ticketsCollection = $this->createForm(TicketFormCollectionType::class, $command);
+        $result = $tFormColTypeHandler->handle($command, $commandManager);
 
-        $ticketsCollection->handleRequest($request);
-
-        if ($ticketsCollection->isSubmitted() && $ticketsCollection->isValid())
+        if (true === $result)
         {
-            $commandManager->completeCommand($command);
             return $this->redirectToRoute('payment');
         }
 
         return $this->render('tickets.html.twig',
-            array('ticketsCollection' => $ticketsCollection->createView(), 'command' => $command));
+            array('ticketsCollection' => $result->createView(), 'command' => $command));
     }
 
     /**
