@@ -2,11 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Command;
+use AppBundle\Form\Handler\CommandTypeHandler;
 use AppBundle\Form\TicketFormCollectionType;
 use AppBundle\Manager\CommandManager;
 use AppBundle\Service\Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Form\CommandType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,25 +16,23 @@ class CommandController extends Controller
     /**
      * @Route("/command", name="command")
      *
-     * @param Request $request
+     * @param CommandTypeHandler $commandTypeHandler
      * @param CommandManager $commandManager
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function commandAction(Request $request, CommandManager $commandManager)
+    public function commandAction(CommandTypeHandler $commandTypeHandler, CommandManager $commandManager)
     {
         $command = $commandManager->initCommand();
-        $commandForm = $this->createForm(CommandType::class, $command);
+        $result = $commandTypeHandler->handle($command);
 
-        $commandForm->handleRequest($request);
-
-        if ($commandForm->isSubmitted() && $commandForm->isValid())
+        if ($result instanceof Command)
         {
             $commandManager->generateTickets($command);
 
             return $this->redirectToRoute('tickets');
         }
 
-        return $this->render('command.html.twig', array('commandForm' => $commandForm->createView()));
+        return $this->render('command.html.twig', array('commandForm' => $result->createView()));
     }
 
     /**
