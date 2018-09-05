@@ -30,7 +30,7 @@ class TicketFormCollectionType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => Command::class,
-            'validation_groups' => ['step2']
+            'validation_groups' => ['ticketForm']
         ));
     }
 }
