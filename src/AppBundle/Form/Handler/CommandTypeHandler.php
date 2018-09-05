@@ -5,6 +5,7 @@ namespace AppBundle\Form\Handler;
 
 use AppBundle\Entity\Command;
 use AppBundle\Form\CommandType;
+use AppBundle\Manager\CommandManager;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -26,7 +27,7 @@ class CommandTypeHandler
         $this->formFactory = $formFactory;
     }
 
-    public function handle(Command $command)
+    public function handle(Command $command, CommandManager $commandManager)
     {
         $request = $this->stack->getCurrentRequest();
 
@@ -36,7 +37,8 @@ class CommandTypeHandler
 
         if ($commandForm->isSubmitted() && $commandForm->isValid())
         {
-            return $command;
+            $commandManager->generateTickets($command);
+            return true;
         }
 
         return $commandForm;
