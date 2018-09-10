@@ -30,22 +30,17 @@ class Pay
      * @param $totalPrice
      * @param $description
      * @return bool|mixed|null
+     *
+     * @throws \Stripe\Error\Card
      */
     public function createCharge($totalPrice, $description)
     {
-        try
-        {
-            $charge = \Stripe\Charge::create(array(
-                "amount" => $totalPrice * 100, // Amount in cents
-                "currency" => "eur",
-                "source" => $this->getCardToken(),
-                "description" => $description
-            ));
-        }
-        catch(\Exception $e)
-        {
-            return false;
-        }
+        $charge = \Stripe\Charge::create(array(
+            "amount" => $totalPrice * 100, // Amount in cents
+            "currency" => "eur",
+            "source" => $this->getCardToken(),
+            "description" => $description
+        ));
 
         return $charge['id'];
     }
