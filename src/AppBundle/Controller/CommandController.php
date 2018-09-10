@@ -22,10 +22,10 @@ class CommandController extends Controller
     public function commandAction(CommandTypeHandler $commandTypeHandler, CommandManager $commandManager)
     {
         $command = $commandManager->initCommand();
+
         $result = $commandTypeHandler->handle($command, $commandManager);
 
-        if (true === $result)
-        {
+        if (true === $result) {
             return $this->redirectToRoute('tickets');
         }
 
@@ -46,8 +46,7 @@ class CommandController extends Controller
 
         $result = $tFormColTypeHandler->handle($command, $commandManager);
 
-        if (true === $result)
-        {
+        if (true === $result) {
             return $this->redirectToRoute('payment');
         }
 
@@ -69,17 +68,15 @@ class CommandController extends Controller
 
         if ($request->isMethod('POST'))
         {
-            try
+            if ($commandManager->payAndSaveCommand($command))
             {
-                $commandManager->payAndSaveCommand($command);
                 $this->addFlash("success", "Paiement éffectué !");
                 return $this->redirectToRoute("confirm");
             }
-            catch (\Stripe\Error\Card $e)
+            else
             {
                 $this->addFlash("error", "Erreur, paiement non éffectué !");
                 return $this->redirectToRoute("payment");
-                // The card has been declined
             }
         }
 

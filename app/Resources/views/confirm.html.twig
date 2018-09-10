@@ -18,7 +18,7 @@
                 {% endfor %}
 
                 <p>
-                    Vous avez acheté <strong>{{ command.numberOfTickets }}</strong> billet(s) au prix de
+                    Vous avez acheté <strong>{{ command.numberOfTickets }}</strong> billet(s) au prix total de
                     <strong>{{ command.totalPrice }}€</strong>.
                     <br/>
                     <span class="breakWord">
@@ -31,7 +31,7 @@
                     {% else %}
                         Une erreur est survenue durant l'envoi de l'email vers l'adresse
                         <strong>{{ command.visitorEmail }}</strong>. Veuillez faire une capture d'écran ou noter les
-                        informations qui sont affichée sur ce récapitulatif.
+                        informations qui sont affichées sur ce récapitulatif.
                     {% endif %}
                 </p>
             </div>
