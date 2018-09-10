@@ -12,6 +12,34 @@
                 <h1>Paiement de votre commande:</h1>
             </div>
 
+            <div class="resumeCommand">
+                <p>
+                    <strong>Récapitulatif :</strong> Vous avez commandé <strong>{{ command.numberOfTickets }}</strong>
+                    {% if command.numberOfTickets > 1 %}
+                        billets
+                    {% else %}
+                        billet
+                    {% endif %}
+                    {% if command.fullDay %}
+                        <strong>journée</strong>
+                    {% else %}
+                        <strong>demi-journée</strong>
+                    {% endif %}
+                    pour le <strong>{{  command.visitDate|date("d/m/Y") }}</strong>.
+                    <br/>
+                    {% if command.numberOfTickets > 1 %}
+                        Les réservations sont éffectuées pour les personnes suivantes :
+                    {% else %}
+                        La réservation est éffectuée pour la personne suivante :
+                    {% endif %}
+                </p>
+                {% for ticket in command.tickets %}
+                    - {{ ticket.firstName }} {{ ticket.lastName }} ({{ ticket.birthDate|date("d/m/Y") }}) : {{ ticket.ticketPrice }}€
+                    <br/>
+                {% endfor %}
+                <br/>
+            </div>
+
             <div id="status">
                 <p>
                     <svg id="icon-status" width="1792" height="1792" viewBox="0 0 1792 1792"
