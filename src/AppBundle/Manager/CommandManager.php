@@ -7,6 +7,7 @@ use AppBundle\Entity\Command;
 use AppBundle\Entity\Ticket;
 use AppBundle\Exception\CommandNotFoundException;
 use AppBundle\Service\Pay;
+use Stripe\Error\Card;
 use Swift_Mailer;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -145,14 +146,18 @@ class CommandManager
      */
     public function payAndSaveCommand(Command $command)
     {
-        $transactionId = $this->pay->createCharge($command->getTotalPrice(), "Commande");
-        if($transactionId !== false)
+
+        try
         {
-            $command->setChargeId($transactionId);
-            $this->persistAndFlushCommand($command);
-            return true;
+            $transactionId = $this->pay->createCharge($command->getTotalPrice(), "Commande");
+        }
+        catch(Card $e)
+        {
+            return false;
         }
 
-        return false;
+        $command->setChargeId($transactionId);
+        $this->persistAndFlushCommand($command);
+        return true;
     }
 }
