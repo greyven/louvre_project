@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for D:\Programmes\laragon\www\louvre_project\src\AppBundle/Validator/Constraints</title>
+  <title>Dashboard for D:\Programmes\laragon\www\louvre_project\src\AppBundle/Form/Handler</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../../.css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../../.css/nv.d3.min.css" rel="stylesheet" type="text/css">
@@ -20,8 +20,8 @@
      <div class="col-md-12">
       <ol class="breadcrumb">
         <li><a href="../../index.html">D:\Programmes\laragon\www\louvre_project\src\AppBundle</a></li>
-        <li><a href="../index.html">Validator</a></li>
-        <li><a href="index.html">Constraints</a></li>
+        <li><a href="../index.html">Form</a></li>
+        <li><a href="index.html">Handler</a></li>
         <li class="active">(Dashboard)</li>
 
       </ol>
@@ -61,9 +61,7 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="NotSundayValidator.php.html#9">AppBundle\Validator\Constraints\NotSundayValidator</a></td><td class="text-right">66%</td></tr>
-       <tr><td><a href="PassedTwoPmValidator.php.html#9">AppBundle\Validator\Constraints\PassedTwoPmValidator</a></td><td class="text-right">66%</td></tr>
-       <tr><td><a href="OneThousandTicketsMaxValidator.php.html#10">AppBundle\Validator\Constraints\OneThousandTicketsMaxValidator</a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="ContactTypeHandler.php.html#11">AppBundle\Form\Handler\ContactTypeHandler</a></td><td class="text-right">81%</td></tr>
 
        </tbody>
       </table>
@@ -80,9 +78,7 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="PassedTwoPmValidator.php.html#9">AppBundle\Validator\Constraints\PassedTwoPmValidator</a></td><td class="text-right">4</td></tr>
-       <tr><td><a href="OneThousandTicketsMaxValidator.php.html#10">AppBundle\Validator\Constraints\OneThousandTicketsMaxValidator</a></td><td class="text-right">4</td></tr>
-       <tr><td><a href="NotSundayValidator.php.html#9">AppBundle\Validator\Constraints\NotSundayValidator</a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="ContactTypeHandler.php.html#11">AppBundle\Form\Handler\ContactTypeHandler</a></td><td class="text-right">4</td></tr>
 
        </tbody>
       </table>
@@ -120,10 +116,7 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="OneThousandTicketsMaxValidator.php.html#27"><abbr title="AppBundle\Validator\Constraints\OneThousandTicketsMaxValidator::validate">validate</abbr></a></td><td class="text-right">60%</td></tr>
-       <tr><td><a href="NotSundayValidator.php.html#11"><abbr title="AppBundle\Validator\Constraints\NotSundayValidator::validate">validate</abbr></a></td><td class="text-right">66%</td></tr>
-       <tr><td><a href="PassedTwoPmValidator.php.html#18"><abbr title="AppBundle\Validator\Constraints\PassedTwoPmValidator::validate">validate</abbr></a></td><td class="text-right">66%</td></tr>
-       <tr><td><a href="NotPublicHolidayValidator.php.html#12"><abbr title="AppBundle\Validator\Constraints\NotPublicHolidayValidator::validate">validate</abbr></a></td><td class="text-right">83%</td></tr>
+       <tr><td><a href="ContactTypeHandler.php.html#33"><abbr title="AppBundle\Form\Handler\ContactTypeHandler::handle">handle</abbr></a></td><td class="text-right">71%</td></tr>
 
        </tbody>
       </table>
@@ -140,10 +133,7 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="PassedTwoPmValidator.php.html#18"><abbr title="AppBundle\Validator\Constraints\PassedTwoPmValidator::validate">validate</abbr></a></td><td class="text-right">4</td></tr>
-       <tr><td><a href="NotPublicHolidayValidator.php.html#12"><abbr title="AppBundle\Validator\Constraints\NotPublicHolidayValidator::validate">validate</abbr></a></td><td class="text-right">3</td></tr>
-       <tr><td><a href="OneThousandTicketsMaxValidator.php.html#27"><abbr title="AppBundle\Validator\Constraints\OneThousandTicketsMaxValidator::validate">validate</abbr></a></td><td class="text-right">2</td></tr>
-       <tr><td><a href="NotSundayValidator.php.html#11"><abbr title="AppBundle\Validator\Constraints\NotSundayValidator::validate">validate</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="ContactTypeHandler.php.html#33"><abbr title="AppBundle\Form\Handler\ContactTypeHandler::handle">handle</abbr></a></td><td class="text-right">3</td></tr>
 
        </tbody>
       </table>
@@ -174,7 +164,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,2,0,1,1,6], "Class Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,1,0,2], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -192,7 +182,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,3,0,1,1,5], "Method Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,1,0,0,5], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -242,7 +232,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[100,0,"<a href=\"NotPublicHoliday.php.html#11\">AppBundle\\Validator\\Constraints\\NotPublicHoliday<\/a>"],[91.66666666666666,6,"<a href=\"NotPublicHolidayValidator.php.html#10\">AppBundle\\Validator\\Constraints\\NotPublicHolidayValidator<\/a>"],[100,0,"<a href=\"NotSunday.php.html#11\">AppBundle\\Validator\\Constraints\\NotSunday<\/a>"],[66.66666666666666,2,"<a href=\"NotSundayValidator.php.html#9\">AppBundle\\Validator\\Constraints\\NotSundayValidator<\/a>"],[100,0,"<a href=\"NotTuesday.php.html#11\">AppBundle\\Validator\\Constraints\\NotTuesday<\/a>"],[100,2,"<a href=\"NotTuesdayValidator.php.html#9\">AppBundle\\Validator\\Constraints\\NotTuesdayValidator<\/a>"],[100,1,"<a href=\"OneThousandTicketsMax.php.html#11\">AppBundle\\Validator\\Constraints\\OneThousandTicketsMax<\/a>"],[85.71428571428571,4,"<a href=\"OneThousandTicketsMaxValidator.php.html#10\">AppBundle\\Validator\\Constraints\\OneThousandTicketsMaxValidator<\/a>"],[100,1,"<a href=\"PassedTwoPm.php.html#11\">AppBundle\\Validator\\Constraints\\PassedTwoPm<\/a>"],[66.66666666666666,4,"<a href=\"PassedTwoPmValidator.php.html#9\">AppBundle\\Validator\\Constraints\\PassedTwoPmValidator<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([[100,4,"<a href=\"CommandTypeHandler.php.html#12\">AppBundle\\Form\\Handler\\CommandTypeHandler<\/a>"],[81.81818181818183,4,"<a href=\"ContactTypeHandler.php.html#11\">AppBundle\\Form\\Handler\\ContactTypeHandler<\/a>"],[100,4,"<a href=\"TicketFormCollectionTypeHandler.php.html#12\">AppBundle\\Form\\Handler\\TicketFormCollectionTypeHandler<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -266,7 +256,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[83.33333333333334,3,"<a href=\"NotPublicHolidayValidator.php.html#12\">AppBundle\\Validator\\Constraints\\NotPublicHolidayValidator::validate<\/a>"],[94.44444444444444,3,"<a href=\"NotPublicHolidayValidator.php.html#31\">AppBundle\\Validator\\Constraints\\NotPublicHolidayValidator::getPublicHolidays<\/a>"],[66.66666666666666,2,"<a href=\"NotSundayValidator.php.html#11\">AppBundle\\Validator\\Constraints\\NotSundayValidator::validate<\/a>"],[100,2,"<a href=\"NotTuesdayValidator.php.html#11\">AppBundle\\Validator\\Constraints\\NotTuesdayValidator::validate<\/a>"],[100,1,"<a href=\"OneThousandTicketsMax.php.html#19\">AppBundle\\Validator\\Constraints\\OneThousandTicketsMax::getTargets<\/a>"],[100,1,"<a href=\"OneThousandTicketsMaxValidator.php.html#16\">AppBundle\\Validator\\Constraints\\OneThousandTicketsMaxValidator::__construct<\/a>"],[60,2,"<a href=\"OneThousandTicketsMaxValidator.php.html#27\">AppBundle\\Validator\\Constraints\\OneThousandTicketsMaxValidator::validate<\/a>"],[100,1,"<a href=\"OneThousandTicketsMaxValidator.php.html#45\">AppBundle\\Validator\\Constraints\\OneThousandTicketsMaxValidator::howManyTickets<\/a>"],[100,1,"<a href=\"PassedTwoPm.php.html#18\">AppBundle\\Validator\\Constraints\\PassedTwoPm::getTargets<\/a>"],[66.66666666666666,4,"<a href=\"PassedTwoPmValidator.php.html#18\">AppBundle\\Validator\\Constraints\\PassedTwoPmValidator::validate<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([[100,1,"<a href=\"CommandTypeHandler.php.html#23\">AppBundle\\Form\\Handler\\CommandTypeHandler::__construct<\/a>"],[100,3,"<a href=\"CommandTypeHandler.php.html#30\">AppBundle\\Form\\Handler\\CommandTypeHandler::handle<\/a>"],[100,1,"<a href=\"ContactTypeHandler.php.html#26\">AppBundle\\Form\\Handler\\ContactTypeHandler::__construct<\/a>"],[71.42857142857143,3,"<a href=\"ContactTypeHandler.php.html#33\">AppBundle\\Form\\Handler\\ContactTypeHandler::handle<\/a>"],[100,1,"<a href=\"TicketFormCollectionTypeHandler.php.html#23\">AppBundle\\Form\\Handler\\TicketFormCollectionTypeHandler::__construct<\/a>"],[100,3,"<a href=\"TicketFormCollectionTypeHandler.php.html#30\">AppBundle\\Form\\Handler\\TicketFormCollectionTypeHandler::handle<\/a>"]], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);
