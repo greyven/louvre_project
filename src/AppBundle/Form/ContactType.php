@@ -29,7 +29,7 @@ class ContactType extends AbstractType
                 'required' => true))
             ->add('visitorEmail', EmailType::class, array(
                 'label' => 'Email : ',
-                'constraints' => [new NotBlank()],
+                'constraints' => [new NotBlank(), new EmailType()],
                 'required' => true))
             ->add('subject', TextType::class, array(
                 'label' => 'Sujet : ',
