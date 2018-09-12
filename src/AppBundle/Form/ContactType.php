@@ -8,8 +8,10 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class ContactType extends AbstractType
 {
@@ -29,7 +31,7 @@ class ContactType extends AbstractType
                 'required' => true))
             ->add('visitorEmail', EmailType::class, array(
                 'label' => 'Email : ',
-                'constraints' => [new NotBlank(), new EmailType()],
+                'constraints' => [new NotBlank(), new Email(['message' => 'Veuillez entrer un format d\'email valide.'])],
                 'required' => true))
             ->add('subject', TextType::class, array(
                 'label' => 'Sujet : ',
